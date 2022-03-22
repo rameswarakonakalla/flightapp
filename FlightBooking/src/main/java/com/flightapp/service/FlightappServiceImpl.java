@@ -1,0 +1,113 @@
+package com.flightapp.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.flightapp.exception.AdminLoginFailedException;
+import com.flightapp.model.AdminLoginDetails;
+import com.flightapp.model.Flightapp;
+import com.flightapp.repo.AdminLoginDetailsRepo;
+import com.flightapp.repo.FlightappRepo;
+import com.flightapp.util.FlightppUtiluty;
+
+@Service
+public class FlightappServiceImpl implements FlightappService {
+
+	@Autowired
+	FlightappRepo repo;
+
+	@Autowired
+	AdminLoginDetailsRepo adminRepo;
+
+	@Override
+	public ResponseEntity<Object> saveFlightInfo(Flightapp flightapp) {
+
+		List<String> validateFlightapp = FlightppUtiluty.validateFlightapp(flightapp);
+		if (!validateFlightapp.isEmpty()) {
+
+			return FlightppUtiluty
+					.prepareBadRequest(FlightppUtiluty.prepareErrorMessage(validateFlightapp).getMessage());
+
+		} else if (flightapp.getScheduledDays().equalsIgnoreCase("Daily")
+				|| flightapp.getScheduledDays().equalsIgnoreCase("WeekDays")
+				|| flightapp.getScheduledDays().equalsIgnoreCase("Weekends")) {
+
+			flightapp.setRoundTripCost(flightapp.getTicketCost() * 2);
+			flightapp.setFlightStatus(true);
+
+			List<String> seatNumber = new ArrayList<String>();
+
+			for (int i = 1; i <= flightapp.getTotalBusinessClassSeats(); i++) {
+				if (i % 2 == 0)
+					;
+
+				seatNumber.add("B-" + i);
+
+			}
+			for (int i = 1; i <= flightapp.getTotalNonBusinessClassSeats(); i++) {
+				if (i % 2 != 0)
+					;
+				seatNumber.add("NB-" + i);
+
+			}
+
+			String seatNumbers = seatNumber.stream().collect(Collectors.toList()).toString();
+
+			flightapp.setSeatNumbers(seatNumbers);
+
+			Flightapp save = repo.save(flightapp);
+			Integer FlightNumber = save.getFlightNumber();
+			return new ResponseEntity<>(FlightNumber, HttpStatus.OK);
+		} else {
+			return FlightppUtiluty.prepareBadRequest("Flight Scheduled on Daily / WeekDays / Weekends ");
+		}
+
+	}
+
+	@Override
+	public Boolean adminLogin(AdminLoginDetails adminlogin) {
+
+//		AdminLoginDetails save = adminRepo.save(adminlogin);
+//		System.out.println(save);
+		if (adminlogin.getUsername().equalsIgnoreCase("admin") == adminlogin.getPassword().equalsIgnoreCase("admin")) {
+			return true;
+		} else {
+			throw new AdminLoginFailedException("Admin Access Denied ..!! ,, Try Again ...!!!");
+		}
+
+	}
+
+	@Override
+	public ResponseEntity<Object> searchFlight(Flightapp flightapp) {
+
+		List<String> validatesearchFlight = FlightppUtiluty.validatesearchFlight(flightapp);
+		if (!validatesearchFlight.isEmpty()) {
+			ResponseEntity<Object> prepareBadRequest = FlightppUtiluty
+					.prepareBadRequest(FlightppUtiluty.prepareErrorMessage(validatesearchFlight).getMessage());
+			return prepareBadRequest;
+
+		} else {
+			List<Flightapp> findByFromplaceAndToplace = repo.findByFromplaceAndToplace(flightapp.getFromplace(),
+					flightapp.getToplace());
+
+			return new ResponseEntity<Object>(
+					findByFromplaceAndToplace.stream().filter(p -> p.getFlightStatus()).collect(Collectors.toList()),
+					HttpStatus.OK);
+		}
+	}
+
+	@Override
+	public String saveInventory(Flightapp flightapp) {
+
+		flightapp.setFlightStatus(false);
+		repo.save(flightapp);
+		return "Flight Id " + flightapp.getFlightNumber() + " Details Updated ";
+	}
+
+}
