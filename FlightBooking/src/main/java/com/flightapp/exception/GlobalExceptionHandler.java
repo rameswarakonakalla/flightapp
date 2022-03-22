@@ -20,4 +20,13 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new ResponseForException(ex.getMessage(), LocalDateTime.now(),
 				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(InvalidTokenException.class)
+	public ResponseEntity<ResponseForException> invalidTokenException(InvalidTokenException invalidTokenException) {
+		
+		return new ResponseEntity<>(
+				new ResponseForException(invalidTokenException.getMessage(), LocalDateTime.now(), HttpStatus.UNAUTHORIZED),
+				HttpStatus.UNAUTHORIZED);
+	}
 }

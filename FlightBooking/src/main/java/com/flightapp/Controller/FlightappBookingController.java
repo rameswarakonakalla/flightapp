@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flightapp.exception.InvalidTokenException;
+import com.flightapp.feignClients.AuthFeign;
 import com.flightapp.model.UserRegister;
 import com.flightapp.service.UserRegisterService;
 
@@ -23,32 +26,51 @@ public class FlightappBookingController {
 	@Autowired
 	UserRegisterService service;
 
+	@Autowired
+	AuthFeign authFeign ; 
+	
 	@PostMapping("/booking/{flightNumber}")
-	public String bookFlightTicket(@RequestBody UserRegister register, @PathVariable Integer flightNumber) {
+	public String bookFlightTicket(@RequestHeader("Authorization") String token , @RequestBody UserRegister register, @PathVariable Integer flightNumber) {
 
-		return service.bookFlightTicket(register, flightNumber);
+		if(authFeign.getValidity(token).getBody().isValid()) {
+			return service.bookFlightTicket(register, flightNumber);
+		}
+		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
+		
 
 	}
 
 	@GetMapping("/ticket/{pnr}")
-	public Optional<UserRegister> getBookingDetails(@PathVariable String pnr) {
+	public Optional<UserRegister> getBookingDetails(@RequestHeader("Authorization") String token ,@PathVariable String pnr) {
 
-		return service.getBookingDetails(pnr);
+		
 
+		if(authFeign.getValidity(token).getBody().isValid()) {
+			return service.getBookingDetails(pnr);
+		}
+		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 	}
 
 	@GetMapping("booking/history/{emailId}")
-	public List<UserRegister> getBookingDetailsBasedOnEmail(@PathVariable String emailId) {
+	public List<UserRegister> getBookingDetailsBasedOnEmail(@RequestHeader("Authorization") String token ,@PathVariable String emailId) {
 			
-		return service.getBookingDetailsBasedOnEmail(emailId);
+		
+		if(authFeign.getValidity(token).getBody().isValid()) {
+			return service.getBookingDetailsBasedOnEmail(emailId);
+		}
+		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 	}
 
 	@DeleteMapping("booking/cancel/{pnr}")
-	public String deleteBookingDetails(@PathVariable String pnr) {
+	public String deleteBookingDetails(@RequestHeader("Authorization") String token ,@PathVariable String pnr) {
 
-		service.deleteBookingDetails(pnr);
+		if(authFeign.getValidity(token).getBody().isValid()) {
+			service.deleteBookingDetails(pnr);
+			
+			return pnr + " Details Deleted SucessFull ";
+		}
+		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 		
-		return pnr + " Details Deleted SucessFull ";
 
 	}
 	

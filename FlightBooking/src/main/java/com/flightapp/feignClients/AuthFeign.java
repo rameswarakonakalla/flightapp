@@ -16,6 +16,6 @@ public interface AuthFeign {
 	 * @param token
 	 * @return
 	 */
-	@GetMapping(value = "/apps/v1.0/tweets/validate")
+	@GetMapping(value = "api/v1.0/flight/airline/user/validate")
 	public ResponseEntity<AuthResponse> getValidity(@RequestHeader("Authorization") final String token);
 }

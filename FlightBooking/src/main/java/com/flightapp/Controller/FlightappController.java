@@ -8,11 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flightapp.exception.AdminLoginFailedException;
+import com.flightapp.exception.InvalidTokenException;
+import com.flightapp.feignClients.AuthFeign;
 import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.Flightapp;
 import com.flightapp.service.FlightappService;
@@ -24,6 +27,8 @@ public class FlightappController {
 	@Autowired
 	FlightappService service;
 
+	@Autowired
+	private AuthFeign authFeign;
 
 	@PostMapping("/admin/login")
 	public String adminLogin(@RequestBody AdminLoginDetails details) {
@@ -34,20 +39,31 @@ public class FlightappController {
 			throw new AdminLoginFailedException("Admin Access Denied ..!! ,, Try Again ...!!!");
 
 		}
+		
+		
 	}
 
 //	
 	
 	@PostMapping("/airline/register")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public ResponseEntity<Object> saveFlightInfo(@RequestBody Flightapp flightapp) {
-		return service.saveFlightInfo(flightapp);
+	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token ,  @RequestBody Flightapp flightapp) {
+		
+		//return service.saveFlightInfo(flightapp);
 
+		if(authFeign.getValidity(token).getBody().isValid()) {
+			return service.saveFlightInfo(flightapp);
+		}
+		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 	}
 
 	@PostMapping("/airline/inventory/add")
-	public String saveInventory(@RequestBody Flightapp flightapp) {
-		return service.saveInventory(flightapp);
+	public String saveInventory(@RequestHeader("Authorization") String token , @RequestBody Flightapp flightapp) {
+		
+		if(authFeign.getValidity(token).getBody().isValid()) {
+			return service.saveInventory(flightapp);
+		}
+		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 
 	}
 	

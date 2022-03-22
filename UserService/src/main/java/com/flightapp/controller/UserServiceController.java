@@ -20,7 +20,7 @@ import com.flightapp.model.UserData;
 import com.flightapp.service.UserServices;
 
 @RestController
-@RequestMapping("/api/v1.0/flight/airline")
+@RequestMapping("/api/v1.0/flight/airline/user")
 public class UserServiceController {
 
 	@Autowired
@@ -36,7 +36,7 @@ public class UserServiceController {
 
 		return userService.login(userlogincredentials);
 	}
-
+	
 	@GetMapping(value = "/validate")
 	public ResponseEntity<AuthResponse> getValidity(@RequestHeader("Authorization") final String token) {
 		System.out.println("in side method {}" + token);
