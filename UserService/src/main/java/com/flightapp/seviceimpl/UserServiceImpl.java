@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserServices{
 
 	@Override
 	public ResponseEntity<Object> register(UserData userData) {
-		Optional<UserData> user=userRepository.findById(userData.getUserName());
+		Optional<UserData> user=userRepository.findById(userData.getEmailid());
 		if(user.isEmpty()) {
 			try {
 				userRepository.save(userData);
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserServices{
 			res.setValid(true);
 			Optional<UserData> user1=userRepository.findById(jwtutil.extractUsername(token1));
 			if(user1.isPresent()) {
-				res.setUsername(user1.get().getUserName());
+				res.setUsername(user1.get().getEmailid());
 				res.setValid(true);
 				res.setToken("token successfully validated");
 				

@@ -32,7 +32,7 @@ public class CustomerDetailsService implements UserDetailsService {
 		{
 			Optional<UserData> user=userdao.findById(uname);
 			if(user.isPresent()) {
-				return new User(user.get().getUserName(), user.get().getPassword(), new ArrayList<>());
+				return new User(user.get().getEmailid(), user.get().getPassword(), new ArrayList<>());
 			}
 			else {
 				throw new UsernameNotFoundException("User id not found");

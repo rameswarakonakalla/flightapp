@@ -13,5 +13,6 @@ public interface FlightappRepo extends JpaRepository<Flightapp,Integer> {
 	
 	List<Flightapp> findByFromplaceAndToplace(String from , String to);
 	
+	Flightapp findByFlightNumber(Integer flightNumber);
 	
 }

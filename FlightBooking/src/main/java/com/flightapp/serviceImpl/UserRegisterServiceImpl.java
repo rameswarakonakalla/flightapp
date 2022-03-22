@@ -1,6 +1,6 @@
-package com.flightapp.service;
+package com.flightapp.serviceImpl;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +14,7 @@ import com.flightapp.model.Flightapp;
 import com.flightapp.model.UserRegister;
 import com.flightapp.repo.FlightappRepo;
 import com.flightapp.repo.UserRegisterRepo;
+import com.flightapp.service.UserRegisterService;
 
 @Service
 public class UserRegisterServiceImpl implements UserRegisterService {
@@ -24,20 +25,19 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 	@Autowired
 	FlightappRepo flightappRepo;
 
-	public final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
+	
 	
 	public String bookFlightTicket(UserRegister register, Integer flightNumber) {
 
 		Optional<Flightapp> findById = flightappRepo.findById(flightNumber);
-//		System.out.println("------------------------" + findById);
 
+		Flightapp findByFlightNumber = flightappRepo.findByFlightNumber(flightNumber);
+		
 		if (findById.isPresent()) {
 
 			register.setFlightNumber(flightNumber);
-			
+			register.setFlightdetails(findByFlightNumber);
 			String seatNumbers = register.getSeatNumbers();
-			System.out.println("**************" +seatNumbers.length());
-//			if(seatNumbers.length() == register.getNoOfSeatstoBook()) {
 				register.setSeatNumbers(seatNumbers);
 				Random rnd = new Random();
 				int number = rnd.nextInt(999999);
@@ -45,11 +45,6 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 				register.setPnr(pnr);
 				userRegisterRepo.save(register);
 				return " PNR " + register.getPnr();
-//			}else {
-//				throw new BookingFailedException("Please enter correct seat  details .. !!");
-//			}
-			
-			
 		} else {
 			throw new BookingFailedException("Please enter correct details .. !!");
 		}
@@ -60,8 +55,8 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 	public Optional<UserRegister> getBookingDetails(String pnr) {
 
 		Optional<UserRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
-
 		if (findByPnr.isPresent()) {
+			//register.setFlightdetails(findById);
 			return findByPnr;
 		} else {
 			throw new BookingFailedException("Please enter correct PNR Number .. !!");
@@ -82,7 +77,9 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 	@Override
 	public Optional<UserRegister> deleteBookingDetails(String pnr) {
 		
-		 
+		Optional<UserRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
+		Date startDate = findByPnr.get().getFlightdetails().getStartDate();
+		startDate.getHours();
 		if(userRegisterRepo.findByPnr(pnr).isPresent()) {
 			
 			return userRegisterRepo.removeByPnr(pnr);

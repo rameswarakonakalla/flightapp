@@ -17,15 +17,12 @@ public class UserData {
 	    @Column
 	    @Schema(description = "First name of the user",required = true,example="rameswara")
 	    @NotBlank(message="First name should not be empty")
-	    private String firstName;
-	    @Column
-	    @Schema(description = "Last name of the user",required = true,example="K")
-	    @NotBlank(message="Last name should not be empty")
-	    private String lastName;
+	    private String name;
+	    
 	    @Id
 	    @Schema(description = "user name of the user",required = true,example="k@gmail.com")
 	    @Pattern(regexp = "[a-zA-Z0-9@.]*$", message = "user name should contain only alphabets and digits")
-	    private String userName;
+	    private String emailid;
 	    @Column
 	    @Schema(description = "Password of the user",required = true,example="Konakalla")
 	    @NotBlank(message="Password should not be empty")

@@ -1,4 +1,4 @@
-package com.flightapp.service;
+package com.flightapp.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.Flightapp;
 import com.flightapp.repo.AdminLoginDetailsRepo;
 import com.flightapp.repo.FlightappRepo;
+import com.flightapp.service.FlightappService;
 import com.flightapp.util.FlightppUtiluty;
 
 @Service
@@ -25,7 +26,6 @@ public class FlightappServiceImpl implements FlightappService {
 	@Autowired
 	AdminLoginDetailsRepo adminRepo;
 
-	@Override
 	public ResponseEntity<Object> saveFlightInfo(Flightapp flightapp) {
 
 		List<String> validateFlightapp = FlightppUtiluty.validateFlightapp(flightapp);
@@ -83,7 +83,6 @@ public class FlightappServiceImpl implements FlightappService {
 
 	}
 
-	@Override
 	public ResponseEntity<Object> searchFlight(Flightapp flightapp) {
 
 		List<String> validatesearchFlight = FlightppUtiluty.validatesearchFlight(flightapp);
@@ -102,7 +101,6 @@ public class FlightappServiceImpl implements FlightappService {
 		}
 	}
 
-	@Override
 	public String saveInventory(Flightapp flightapp) {
 
 		flightapp.setFlightStatus(false);
