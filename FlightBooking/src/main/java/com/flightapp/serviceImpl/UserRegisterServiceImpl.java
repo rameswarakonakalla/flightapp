@@ -13,6 +13,7 @@ import com.flightapp.exception.BookingFailedException;
 import com.flightapp.model.Flightapp;
 import com.flightapp.model.BookingRegister;
 import com.flightapp.repo.FlightappRepo;
+import com.flightapp.repo.UserRepo;
 import com.flightapp.repo.BookingRegisterRepo;
 import com.flightapp.service.UserRegisterService;
 
@@ -25,7 +26,8 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 	@Autowired
 	FlightappRepo flightappRepo;
 
-	
+	@Autowired
+	UserRepo userRepo;
 	
 	public String bookFlightTicket(BookingRegister register, Integer flightNumber) {
 
@@ -35,6 +37,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 		
 		if (findById.isPresent()) {
 
+			
 			register.setFlightNumber(flightNumber);
 			register.setFlightdetails(findByFlightNumber);
 			String seatNumbers = register.getSeatNumbers();
