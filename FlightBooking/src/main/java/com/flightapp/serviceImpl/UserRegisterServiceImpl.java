@@ -11,23 +11,23 @@ import org.springframework.stereotype.Service;
 
 import com.flightapp.exception.BookingFailedException;
 import com.flightapp.model.Flightapp;
-import com.flightapp.model.UserRegister;
+import com.flightapp.model.BookingRegister;
 import com.flightapp.repo.FlightappRepo;
-import com.flightapp.repo.UserRegisterRepo;
+import com.flightapp.repo.BookingRegisterRepo;
 import com.flightapp.service.UserRegisterService;
 
 @Service
 public class UserRegisterServiceImpl implements UserRegisterService {
 
 	@Autowired
-	UserRegisterRepo userRegisterRepo;
+	BookingRegisterRepo userRegisterRepo;
 
 	@Autowired
 	FlightappRepo flightappRepo;
 
 	
 	
-	public String bookFlightTicket(UserRegister register, Integer flightNumber) {
+	public String bookFlightTicket(BookingRegister register, Integer flightNumber) {
 
 		Optional<Flightapp> findById = flightappRepo.findById(flightNumber);
 
@@ -52,9 +52,9 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 	}
 
 	@Override
-	public Optional<UserRegister> getBookingDetails(String pnr) {
+	public Optional<BookingRegister> getBookingDetails(String pnr) {
 
-		Optional<UserRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
+		Optional<BookingRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
 		if (findByPnr.isPresent()) {
 			//register.setFlightdetails(findById);
 			return findByPnr;
@@ -65,8 +65,8 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 	}
 
 	@Override
-	public List<UserRegister> getBookingDetailsBasedOnEmail(String emailId) {
-		List<UserRegister> findByEmailId = userRegisterRepo.findByEmailId(emailId);
+	public List<BookingRegister> getBookingDetailsBasedOnEmail(String emailId) {
+		List<BookingRegister> findByEmailId = userRegisterRepo.findByEmailId(emailId);
 		if(findByEmailId.isEmpty()) {
 			throw new BookingFailedException("Please enter Correct Email id .. !!");
 		}
@@ -75,9 +75,9 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 	}
 
 	@Override
-	public Optional<UserRegister> deleteBookingDetails(String pnr) {
+	public Optional<BookingRegister> deleteBookingDetails(String pnr) {
 		
-		Optional<UserRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
+		Optional<BookingRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
 		Date startDate = findByPnr.get().getFlightdetails().getStartDate();
 		startDate.getHours();
 		if(userRegisterRepo.findByPnr(pnr).isPresent()) {

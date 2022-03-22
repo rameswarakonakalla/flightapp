@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.flightapp.exception.AdminLoginFailedException;
 import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.Flightapp;
-import com.flightapp.repo.AdminLoginDetailsRepo;
 import com.flightapp.repo.FlightappRepo;
 import com.flightapp.service.FlightappService;
 import com.flightapp.util.FlightppUtiluty;
@@ -23,8 +22,7 @@ public class FlightappServiceImpl implements FlightappService {
 	@Autowired
 	FlightappRepo repo;
 
-	@Autowired
-	AdminLoginDetailsRepo adminRepo;
+	
 
 	public ResponseEntity<Object> saveFlightInfo(Flightapp flightapp) {
 

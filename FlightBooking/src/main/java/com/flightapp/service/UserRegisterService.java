@@ -3,17 +3,17 @@ package com.flightapp.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.flightapp.model.UserRegister;
+import com.flightapp.model.BookingRegister;
 
 public interface UserRegisterService {
 
-	String bookFlightTicket(UserRegister register , Integer id);
+	String bookFlightTicket(BookingRegister register , Integer id);
 
-	Optional<UserRegister> getBookingDetails(String pnr);
+	Optional<BookingRegister> getBookingDetails(String pnr);
 
-	List<UserRegister> getBookingDetailsBasedOnEmail(String emailId);
+	List<BookingRegister> getBookingDetailsBasedOnEmail(String emailId);
 
-	Optional<UserRegister> deleteBookingDetails(String pnr);
+	Optional<BookingRegister> deleteBookingDetails(String pnr);
 
 	
 }

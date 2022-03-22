@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flightapp.exception.InvalidTokenException;
 import com.flightapp.feignClients.AuthFeign;
-import com.flightapp.model.UserRegister;
+import com.flightapp.model.BookingRegister;
 import com.flightapp.service.UserRegisterService;
 
 @RestController
@@ -30,7 +30,7 @@ public class FlightappBookingController {
 	AuthFeign authFeign ; 
 	
 	@PostMapping("/booking/{flightNumber}")
-	public String bookFlightTicket(@RequestHeader("Authorization") String token , @RequestBody UserRegister register, @PathVariable Integer flightNumber) {
+	public String bookFlightTicket(@RequestHeader("Authorization") String token , @RequestBody BookingRegister register, @PathVariable Integer flightNumber) {
 
 		if(authFeign.getValidity(token).getBody().isValid()) {
 			return service.bookFlightTicket(register, flightNumber);
@@ -41,7 +41,7 @@ public class FlightappBookingController {
 	}
 
 	@GetMapping("/ticket/{pnr}")
-	public Optional<UserRegister> getBookingDetails(@RequestHeader("Authorization") String token ,@PathVariable String pnr) {
+	public Optional<BookingRegister> getBookingDetails(@RequestHeader("Authorization") String token ,@PathVariable String pnr) {
 
 		
 
@@ -52,7 +52,7 @@ public class FlightappBookingController {
 	}
 
 	@GetMapping("booking/history/{emailId}")
-	public List<UserRegister> getBookingDetailsBasedOnEmail(@RequestHeader("Authorization") String token ,@PathVariable String emailId) {
+	public List<BookingRegister> getBookingDetailsBasedOnEmail(@RequestHeader("Authorization") String token ,@PathVariable String emailId) {
 			
 		
 		if(authFeign.getValidity(token).getBody().isValid()) {
