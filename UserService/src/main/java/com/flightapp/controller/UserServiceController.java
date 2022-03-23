@@ -43,19 +43,5 @@ public class UserServiceController {
 		return userService.validate(token);
 	}
 
-//	@GetMapping(value = "/users/all")
-//	public ResponseEntity<Object> getAllUsers(){
-//		return userService.getAllUsers();
-//	}
-
-//	@GetMapping(value = "/users/search/{username}")
-//	public ResponseEntity<Object> searchByUsername(@PathVariable String username){
-//		return userService.searchByUsername(username);
-//	}
-
-//	@PutMapping(value="/{username}/forgot")
-//	public ResponseEntity<Object> forgotPassword(@PathVariable String username, @Valid @RequestBody LoginDetails data){
-//		return userService.forgotPassword(data);
-//	}
 
 }

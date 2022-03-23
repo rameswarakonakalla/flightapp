@@ -31,11 +31,15 @@ public class FlightppUtiluty {
 			error.add("Meal Type");
 		}
 
-		if (flightapp.getTotalBusinessClassSeats() == null ) {
-			error.add("Business class Seats");
+		if (flightapp.getTotalBusinessClassSeats() == null  ) {
+			error.add("Business class Seats cann't be Null");
+		}else if(flightapp.getTotalBusinessClassSeats() >21  ) {
+			error.add("Business class Seats Should  be lessthan 20");
 		}
 		if(flightapp.getTotalNonBusinessClassSeats() == null ) {
 			error.add("Non-Business class Seats");
+		}else if(flightapp.getTotalNonBusinessClassSeats() >21  ) {
+			error.add("Non-Business class Seats Should  be lessthan 20");
 		}
 		if(flightapp.getTicketCost() ==  null) {
 			error.add("Ticket Cost");

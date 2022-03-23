@@ -88,32 +88,6 @@ public class UserServiceImpl implements UserServices{
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
 
-//	@Override
-//	public ResponseEntity<Object> getAllUsers() {
-//		List<UserData> list = userRepository.findAll();
-//		if(list.isEmpty())
-//			return new ResponseEntity<>(new ResponseMessage("No Users Found"),HttpStatus.NO_CONTENT);
-//		return new ResponseEntity<>(list,HttpStatus.OK);
-//	}
 
-//	@Override
-//	public ResponseEntity<Object> searchByUsername(String username) {
-//		List<UserData> list = userRepository.findAll().stream().filter(o->o.getUserName().contains(username)).collect(Collectors.toList());
-//		if(list.isEmpty())
-//			return new ResponseEntity<>(new ResponseMessage("No Users Found"),HttpStatus.NO_CONTENT);
-//		return new ResponseEntity<>(new ResponseMessage(list),HttpStatus.OK);
-//	}
-	
-
-//	@Override
-//	public ResponseEntity<Object> forgotPassword(LoginDetails data){
-//            Optional<UserData> user = userRepository.findById(data.getUsername());
-//            if (user.isEmpty()) {
-//                throw new UsernameNotFoundException("Username Not Found, Resister");
-//            }
-//            user.get().setPassword(data.getPassword());
-//            userRepository.save(user.get());
-//            return new ResponseEntity<Object>("Password reset successfull",HttpStatus.OK);
-//	}
 
 }

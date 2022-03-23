@@ -39,39 +39,37 @@ public class FlightappController {
 			throw new AdminLoginFailedException("Admin Access Denied ..!! ,, Try Again ...!!!");
 
 		}
-		
-		
+
 	}
 
-//	
-	
+
 	@PostMapping("/airline/register")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token ,  @RequestBody Flightapp flightapp) {
-		
-		//return service.saveFlightInfo(flightapp);
+	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token,
+			@RequestBody Flightapp flightapp) {
 
-		if(authFeign.getValidity(token).getBody().isValid()) {
+		// return service.saveFlightInfo(flightapp);
+
+		if (authFeign.getValidity(token).getBody().isValid()) {
 			return service.saveFlightInfo(flightapp);
 		}
 		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 	}
 
-	@PostMapping("/airline/inventory/add")
-	public String saveInventory(@RequestHeader("Authorization") String token , @RequestBody Flightapp flightapp) {
-		
-		if(authFeign.getValidity(token).getBody().isValid()) {
-			return service.saveInventory(flightapp);
-		}
-		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
+//	@PostMapping("/airline/inventory/add")
+//	public String saveInventory(@RequestHeader("Authorization") String token, @RequestBody Flightapp flightapp) {
+//
+//		if (authFeign.getValidity(token).getBody().isValid()) {
+//			return service.saveInventory(flightapp);
+//		}
+//		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
+//
+//	}
 
-	}
-	
 	@PostMapping("/search")
 	public ResponseEntity<Object> searchFlight(@RequestBody Flightapp flightapp) {
 		ResponseEntity<Object> searchFlight = service.searchFlight(flightapp);
 		return searchFlight;
 	}
-	
-	
+
 }

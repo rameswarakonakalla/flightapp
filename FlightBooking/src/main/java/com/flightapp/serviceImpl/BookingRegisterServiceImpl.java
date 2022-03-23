@@ -13,12 +13,11 @@ import com.flightapp.exception.BookingFailedException;
 import com.flightapp.model.Flightapp;
 import com.flightapp.model.BookingRegister;
 import com.flightapp.repo.FlightappRepo;
-import com.flightapp.repo.UserRepo;
 import com.flightapp.repo.BookingRegisterRepo;
-import com.flightapp.service.UserRegisterService;
+import com.flightapp.service.BookingRegisterService;
 
 @Service
-public class UserRegisterServiceImpl implements UserRegisterService {
+public class BookingRegisterServiceImpl implements BookingRegisterService {
 
 	@Autowired
 	BookingRegisterRepo userRegisterRepo;
@@ -26,8 +25,6 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 	@Autowired
 	FlightappRepo flightappRepo;
 
-	@Autowired
-	UserRepo userRepo;
 	
 	public String bookFlightTicket(BookingRegister register, Integer flightNumber) {
 

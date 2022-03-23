@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flightapp.exception.InvalidTokenException;
 import com.flightapp.feignClients.AuthFeign;
 import com.flightapp.model.BookingRegister;
-import com.flightapp.service.UserRegisterService;
+import com.flightapp.service.BookingRegisterService;
 
 @RestController
 @RequestMapping("api/v1.0/flight")
@@ -24,7 +24,7 @@ import com.flightapp.service.UserRegisterService;
 public class FlightappBookingController {
 
 	@Autowired
-	UserRegisterService service;
+	BookingRegisterService service;
 
 	@Autowired
 	AuthFeign authFeign ; 
