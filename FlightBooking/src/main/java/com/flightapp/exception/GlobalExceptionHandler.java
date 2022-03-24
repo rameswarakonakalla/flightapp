@@ -14,8 +14,8 @@ import com.flightapp.model.ResponseForException;
 public class GlobalExceptionHandler {
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(BookingFailedException.class)
-	public ResponseEntity<Object> BookingFailedException(BookingFailedException ex) {
+	@ExceptionHandler(UserDefinedException.class)
+	public ResponseEntity<Object> BookingFailedException(UserDefinedException ex) {
 
 		return new ResponseEntity<>(new ResponseForException(ex.getMessage(), LocalDateTime.now(),
 				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);

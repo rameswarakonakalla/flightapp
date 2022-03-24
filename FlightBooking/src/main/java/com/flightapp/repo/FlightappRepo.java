@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
 import java.util.Date;
 import com.flightapp.model.Flightapp;
 
@@ -11,7 +13,7 @@ import com.flightapp.model.Flightapp;
 public interface FlightappRepo extends JpaRepository<Flightapp,Integer> {
 
 	
-	List<Flightapp> findByFromplaceAndToplace(String from , String to);
+	List<Flightapp> findByFromplaceAndToplaceAndStartDate(String from , String to , LocalDate startDate);
 	
 	Flightapp findByFlightNumber(Integer flightNumber);
 	

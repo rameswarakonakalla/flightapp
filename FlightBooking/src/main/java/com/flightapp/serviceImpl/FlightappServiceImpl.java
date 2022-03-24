@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.flightapp.exception.AdminLoginFailedException;
+import com.flightapp.exception.UserDefinedException;
 import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.Flightapp;
 import com.flightapp.repo.FlightappRepo;
@@ -21,8 +22,6 @@ public class FlightappServiceImpl implements FlightappService {
 
 	@Autowired
 	FlightappRepo repo;
-
-	
 
 	public ResponseEntity<Object> saveFlightInfo(Flightapp flightapp) {
 
@@ -36,16 +35,19 @@ public class FlightappServiceImpl implements FlightappService {
 				|| flightapp.getScheduledDays().equalsIgnoreCase("WeekDays")
 				|| flightapp.getScheduledDays().equalsIgnoreCase("Weekends")) {
 
-			flightapp.setRoundTripCost(flightapp.getTicketCost() * 2);
+			if(flightapp.getRoundTrip()) {
+				flightapp.setRoundTripCost(flightapp.getTicketCost() * 2);
+			}else {
+				flightapp.setRoundTripCost(flightapp.getTicketCost());
+			}
 			flightapp.setFlightStatus(true);
 
 			List<String> seatNumber = new ArrayList<String>();
 
 			for (int i = 1; i <= flightapp.getTotalBusinessClassSeats(); i++) {
 				if (i % 2 == 0)
-					;
 
-				seatNumber.add("B-" + i);
+					seatNumber.add("B-" + i);
 
 			}
 			for (int i = 1; i <= flightapp.getTotalNonBusinessClassSeats(); i++) {
@@ -90,9 +92,11 @@ public class FlightappServiceImpl implements FlightappService {
 			return prepareBadRequest;
 
 		} else {
-			List<Flightapp> findByFromplaceAndToplace = repo.findByFromplaceAndToplace(flightapp.getFromplace(),
-					flightapp.getToplace());
-
+			List<Flightapp> findByFromplaceAndToplace = repo.findByFromplaceAndToplaceAndStartDate(flightapp.getFromplace(),
+					flightapp.getToplace() , flightapp.getStartDate());
+			if(findByFromplaceAndToplace.isEmpty()) {
+				 throw new UserDefinedException("No Flights Found on this Date " + flightapp.getStartDate() + "	!!!  Modify your search and Try again ...");
+			}
 			return new ResponseEntity<Object>(
 					findByFromplaceAndToplace.stream().filter(p -> p.getFlightStatus()).collect(Collectors.toList()),
 					HttpStatus.OK);

@@ -31,7 +31,9 @@ public class BookingRegister {
 	
 	private String seatNumbers ;
 	
-	private Integer FlightNumber;
+	private Integer flightNumber;
+	
+	private Double totalBasePrice;
 	
 	@ManyToOne
 	private Flightapp flightdetails;
