@@ -10,9 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.flightapp.exception.UserExistsException;
+import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.AuthResponse;
 import com.flightapp.model.LoginDetails;
 import com.flightapp.model.UserData;
+import com.flightapp.repository.AdminRepo;
 import com.flightapp.repository.UserRepository;
 import com.flightapp.service.UserServices;
 
@@ -23,6 +25,13 @@ public class UserServiceImpl implements UserServices{
 	private UserRepository userRepository;
 	@Autowired
 	private CustomerDetailsService custdetailservice;
+	
+	@Autowired
+	private AdminRepo adminRepo;
+	
+	@Autowired
+	private AdminDetailsService adminDetailsService;
+	
 	@Autowired
 	private JwtUtil jwtutil;
 
@@ -87,6 +96,8 @@ public class UserServiceImpl implements UserServices{
 		}
 		return new ResponseEntity<>(res, HttpStatus.OK);
 	}
+	
+	
 
 
 

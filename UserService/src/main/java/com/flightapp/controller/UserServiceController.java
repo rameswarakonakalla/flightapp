@@ -5,18 +5,18 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flightapp.exception.UserExistsException;
+import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.AuthResponse;
 import com.flightapp.model.LoginDetails;
 import com.flightapp.model.UserData;
+import com.flightapp.service.AdminServices;
 import com.flightapp.service.UserServices;
 
 @RestController
@@ -25,6 +25,9 @@ public class UserServiceController {
 
 	@Autowired
 	private UserServices userService;
+	
+	@Autowired
+	private AdminServices adminServices;
 
 	@PostMapping(value = "/register")
 	public ResponseEntity<Object> register(@Valid @RequestBody UserData user) throws UserExistsException {
@@ -37,11 +40,24 @@ public class UserServiceController {
 		return userService.login(userlogincredentials);
 	}
 	
+	@PostMapping(value = "/adminlogin")
+	public ResponseEntity<AuthResponse> adminLogin(@Valid @RequestBody AdminLoginDetails adminlogincredentials) {
+
+		return adminServices.adminLogin(adminlogincredentials);
+	}
+
+	
 	@GetMapping(value = "/validate")
 	public ResponseEntity<AuthResponse> getValidity(@RequestHeader("Authorization") final String token) {
 		System.out.println("in side method {}" + token);
 		return userService.validate(token);
 	}
 
+
+	@GetMapping(value = "/adminvalidate")
+	public ResponseEntity<AuthResponse> getAdminValidity(@RequestHeader("Authorization") final String token) {
+		System.out.println("in side method {}" + token);
+		return adminServices.adminValidate(token);
+	}
 
 }
