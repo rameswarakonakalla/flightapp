@@ -3,6 +3,8 @@ package com.flightapp.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.flightapp.model.BookingRegister;
 
 public interface BookingRegisterService {
@@ -15,5 +17,6 @@ public interface BookingRegisterService {
 
 	Optional<BookingRegister> deleteBookingDetails(String pnr);
 
+	//public ResponseEntity<Object> deleteBookingDetails(String pnr);
 	
 }

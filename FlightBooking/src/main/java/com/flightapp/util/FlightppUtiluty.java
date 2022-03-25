@@ -58,6 +58,9 @@ public class FlightppUtiluty {
 		if (flightapp.getFromplace() == null) {
 			error.add("From Place");
 		}
+		if(flightapp.getStartDate() == null) {
+			error.add("Start Date");
+		}
 		return error;
 		
 	}

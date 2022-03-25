@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.flightapp.exception.UserDefinedException;
@@ -15,6 +17,7 @@ import com.flightapp.model.BookingRegister;
 import com.flightapp.repo.FlightappRepo;
 import com.flightapp.repo.BookingRegisterRepo;
 import com.flightapp.service.BookingRegisterService;
+import com.flightapp.util.FlightppUtiluty;
 
 @Service
 public class BookingRegisterServiceImpl implements BookingRegisterService {
@@ -68,7 +71,6 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 		} else {
 			throw new UserDefinedException("Please enter correct PNR Number .. !!");
 		}
-
 	}
 
 	@Override
@@ -83,15 +85,23 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 
 	@Override
 	public Optional<BookingRegister> deleteBookingDetails(String pnr) {
-
 		Optional<BookingRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
-		LocalDate startDate = findByPnr.get().getFlightdetails().getStartDate();
+		LocalDate startDate = userRegisterRepo.findByPnr(pnr).get().getFlightdetails().getStartDate();
 		System.out.println(startDate);
-		if (userRegisterRepo.findByPnr(pnr).isPresent()) {
+		LocalDate lt = LocalDate.now();
+		System.out.println(lt);
+		boolean before = lt.isBefore(startDate);
+		System.out.println(lt.isBefore(startDate));
 
-			return userRegisterRepo.removeByPnr(pnr);
+		if (before) {
+			if (userRegisterRepo.findByPnr(pnr).isPresent()) {
+
+				return userRegisterRepo.removeByPnr(pnr);
+			} else {
+				throw new UserDefinedException("Please enter correct PNR Number .. !!");
+			}
 		} else {
-			throw new UserDefinedException("Please enter correct PNR Number .. !!");
+			throw new UserDefinedException("Before 24 hrs ticket cancel is not possible ");
 		}
 	}
 

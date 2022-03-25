@@ -16,10 +16,10 @@ public interface AuthFeign {
 	 * @param token
 	 * @return
 	 */
-	@GetMapping(value = "api/v1.0/flight/airline/user/validate")
+	@GetMapping(value = "api/v1.0/flight/airline/validate")
 	public ResponseEntity<AuthResponse> getValidity(@RequestHeader("Authorization") final String token);
 	
 	
-	@GetMapping(value = "api/v1.0/flight/airline/user/adminvalidate")
+	@GetMapping(value = "api/v1.0/flight/airline/adminvalidate")
 	public ResponseEntity<AuthResponse> getAdminValidity(@RequestHeader("Authorization") final String token);
 }
