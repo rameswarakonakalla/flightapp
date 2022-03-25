@@ -48,9 +48,11 @@ public class FlightappController {
 	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token,
 			@RequestBody Flightapp flightapp) {
 
-		// return service.saveFlightInfo(flightapp);
 
-		if (authFeign.getValidity(token).getBody().isValid()) {
+//		if (authFeign.getValidity(token).getBody().isValid()) {
+//			return service.saveFlightInfo(flightapp);
+//		}
+		if (authFeign.getAdminValidity(token).getBody().isValid()) {
 			return service.saveFlightInfo(flightapp);
 		}
 		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");

@@ -20,12 +20,14 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Autowired
 	CustomerDetailsService emsuserDetailsService;
 
+	
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
 		super.configure(auth);
 		auth.userDetailsService(emsuserDetailsService);
+		
 
 	}
 
@@ -50,5 +52,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
+
 
 }

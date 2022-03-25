@@ -11,8 +11,8 @@ import com.flightapp.model.UserData;
 
 @Service
 public interface UserServices {
-	public ResponseEntity<AuthResponse> login(LoginDetails loginDetails);
-	public ResponseEntity<Object> register(UserData user);
+	public ResponseEntity<AuthResponse> userLogin(UserData loginDetails);
+	public ResponseEntity<Object> userRegister(UserData user);
 	public ResponseEntity<AuthResponse> validate(String authToken);
 	
 	

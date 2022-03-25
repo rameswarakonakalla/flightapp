@@ -5,7 +5,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +15,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginDetails {
-	@Schema(description = "user name of the user",required = true,example="kumar@gmail.com")
+	//@Schema(description = "user name of the user",required = true,example="kumar@gmail.com")
     @Pattern(regexp = "[a-zA-Z0-9@.]*$", message = "user name should contain only alphabets and digits")
 	private String username;
-	@Schema(description = "Password of the user",required = true,example="Kumar")
+	//@Schema(description = "Password of the user",required = true,example="Kumar")
     @NotBlank(message="Password should not be empty")
     @Size(min = 8, message = "minimum 8 Characters required")
 	private String password;

@@ -20,7 +20,7 @@ import com.flightapp.service.AdminServices;
 import com.flightapp.service.UserServices;
 
 @RestController
-@RequestMapping("/api/v1.0/flight/airline/user")
+@RequestMapping("/api/v1.0/flight/airline/")
 public class UserServiceController {
 
 	@Autowired
@@ -29,15 +29,15 @@ public class UserServiceController {
 	@Autowired
 	private AdminServices adminServices;
 
-	@PostMapping(value = "/register")
-	public ResponseEntity<Object> register(@Valid @RequestBody UserData user) throws UserExistsException {
-		return userService.register(user);
+	@PostMapping(value = "/user/register")
+	public ResponseEntity<Object> userRegister(@Valid @RequestBody UserData user) throws UserExistsException {
+		return userService.userRegister(user);
 	}
 
 	@PostMapping(value = "/login")
-	public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginDetails userlogincredentials) {
+	public ResponseEntity<AuthResponse> userLogin( @Valid @RequestBody UserData userlogincredentials) {
 
-		return userService.login(userlogincredentials);
+		return userService.userLogin(userlogincredentials);
 	}
 	
 	@PostMapping(value = "/adminlogin")

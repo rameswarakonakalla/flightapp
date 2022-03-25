@@ -6,19 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.AuthResponse;
+import com.flightapp.model.UserData;
 import com.flightapp.repository.AdminRepo;
 import com.flightapp.service.AdminServices;
 
+@Service
 public class AdminServiceImpl implements AdminServices {
 
 	@Autowired
 	private AdminRepo adminRepo;
 	
 	@Autowired
-	private AdminDetailsService adminDetailsService;
+	private CustomerDetailsService adminDetailsService;
 	
 	@Autowired
 	private JwtUtil jwtutil;
@@ -27,6 +30,7 @@ public class AdminServiceImpl implements AdminServices {
 	public ResponseEntity<AuthResponse> adminValidate(String authToken) {
 		String token1 = authToken.substring(7);
 		AuthResponse res = new AuthResponse();
+		
 		if (Boolean.TRUE.equals(jwtutil.validateToken(token1))) {
 			res.setUsername(jwtutil.extractUsername(token1));
 			res.setValid(true);
@@ -36,6 +40,9 @@ public class AdminServiceImpl implements AdminServices {
 				res.setValid(true);
 				res.setToken("token successfully validated");
 				
+			}else {
+				res.setValid(false);
+				res.setToken("Invalid Token Received");
 			}
 		} else {
 			res.setValid(false);
@@ -48,7 +55,7 @@ public class AdminServiceImpl implements AdminServices {
 	@Override
 	public ResponseEntity<AuthResponse> adminLogin(AdminLoginDetails adminLoginDetails) {
 		
-		final UserDetails userdetails = adminDetailsService.loadUserByUsername(adminLoginDetails.getUsername());
+		final UserDetails userdetails = adminDetailsService.loadUserByUsernameadmin(adminLoginDetails.getUsername());
 		String uid = "";
 		String generateToken = "";
 		if (userdetails.getPassword().equals(adminLoginDetails.getPassword())) {
