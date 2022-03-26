@@ -2,6 +2,7 @@ package com.flightapp.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.flightapp.exception.UserDefinedException;
 import com.flightapp.model.Flightapp;
+import com.flightapp.model.FlightappUpdate;
 import com.flightapp.repo.FlightappRepo;
 import com.flightapp.service.FlightappService;
 import com.flightapp.util.FlightppUtility;
@@ -31,12 +33,6 @@ public class FlightappServiceImpl implements FlightappService {
 				|| flightapp.getScheduledDays().equalsIgnoreCase("Weekends")) {
 
 			flightapp.setRoundTripCost(flightapp.getTicketCost() * 2);
-//			flightapp.setRoundTripCost(flightapp.getTicketCost());
-//			if (flightapp.getRoundTripStatus()) {
-//				
-//			} else {
-//				
-//			}
 			flightapp.setFlightStatus(true);
 
 			List<String> seatNumber = new ArrayList<String>();
@@ -87,11 +83,43 @@ public class FlightappServiceImpl implements FlightappService {
 		}
 	}
 
-	public String saveInventory(Flightapp flightapp) {
+	public ResponseEntity<Object> saveInventory(FlightappUpdate flightappupdate) {
 
-		flightapp.setFlightStatus(false);
-		repo.save(flightapp);
-		return "Flight Id " + flightapp.getFlightNumber() + " Details Updated ";
+		Optional<Flightapp> findById = repo.findById(flightappupdate.getFlightNumber());
+		if (findById.isPresent()) {
+			Flightapp flightappDetailsUpdate = findById.get();
+
+			if (flightappupdate.getAirline() == null) {
+				flightappDetailsUpdate.setAirline(flightappDetailsUpdate.getAirline());
+			} else {
+				flightappDetailsUpdate.setAirline(flightappupdate.getAirline());
+			}
+
+			if (flightappupdate.getAirline() == null) {
+				flightappDetailsUpdate.setFromplace(flightappDetailsUpdate.getFromplace());
+			} else {
+				flightappDetailsUpdate.setFromplace(flightappupdate.getFromplace());
+			}
+
+			if (flightappupdate.getAirline() == null) {
+				flightappDetailsUpdate.setToplace(flightappDetailsUpdate.getToplace());
+			} else {
+				flightappDetailsUpdate.setToplace(flightappupdate.getToplace());
+			}
+
+			if (flightappupdate.getAirline() == null) {
+				flightappDetailsUpdate.setFlightStatus(flightappDetailsUpdate.getFlightStatus());
+			} else {
+				flightappDetailsUpdate.setFlightStatus(flightappupdate.getFlightStatus());
+			}
+
+			repo.save(flightappDetailsUpdate);
+			return new ResponseEntity<Object>("Deatils Updated ", HttpStatus.OK);
+		} else {
+			return FlightppUtility.prepareBadRequest("Flight ID is required ");
+		}
+
+//		return "Flight Id " + flightapp.getFlightNumber() + " Details Updated ";
 	}
 
 }

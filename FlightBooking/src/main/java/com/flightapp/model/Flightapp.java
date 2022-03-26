@@ -1,7 +1,6 @@
 package com.flightapp.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,8 +41,6 @@ public class Flightapp {
 
 	private Double roundTripCost;
 
-//	private Boolean roundTripStatus;
-	
 	private Integer numberofRows;
 
 	private String mealType;
