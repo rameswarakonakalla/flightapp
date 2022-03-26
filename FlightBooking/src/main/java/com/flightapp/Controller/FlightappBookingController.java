@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flightapp.exception.InvalidTokenException;
 import com.flightapp.feignClients.AuthFeign;
 import com.flightapp.model.BookingRegister;
+import com.flightapp.model.SelectedSeats;
 import com.flightapp.service.BookingRegisterService;
 
 @RestController
@@ -31,10 +32,10 @@ public class FlightappBookingController {
 	AuthFeign authFeign ; 
 	
 	@PostMapping("/booking/{flightNumber}")
-	public ResponseEntity<Object> bookFlightTicket(@RequestHeader("Authorization") String token , @RequestBody BookingRegister register, @PathVariable Integer flightNumber) {
+	public ResponseEntity<Object> bookFlightTicket(@RequestHeader("Authorization") String token , @RequestBody BookingRegister register, @PathVariable Integer flightNumber , SelectedSeats seats) {
 
 		if(authFeign.getValidity(token).getBody().isValid()) {
-			return service.bookFlightTicket(register, flightNumber);
+			return service.bookFlightTicket(register, flightNumber , seats);
 		}
 		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 		

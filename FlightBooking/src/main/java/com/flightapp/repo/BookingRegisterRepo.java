@@ -19,4 +19,6 @@ public interface BookingRegisterRepo extends JpaRepository<BookingRegister,Integ
 	
 	@Transactional
 	Optional<BookingRegister> removeByPnr(String pnr);
+	
+	
 }
