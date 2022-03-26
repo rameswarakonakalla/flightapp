@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.AuthResponse;
-import com.flightapp.model.UserData;
 import com.flightapp.repository.AdminRepo;
 import com.flightapp.service.AdminServices;
 

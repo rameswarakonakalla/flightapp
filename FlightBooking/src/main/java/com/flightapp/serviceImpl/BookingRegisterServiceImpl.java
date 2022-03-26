@@ -86,23 +86,33 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 	@Override
 	public Optional<BookingRegister> deleteBookingDetails(String pnr) {
 		Optional<BookingRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
-		LocalDate startDate = userRegisterRepo.findByPnr(pnr).get().getFlightdetails().getStartDate();
+		LocalDate startDate = findByPnr.get().getFlightdetails().getStartDate();
 		System.out.println(startDate);
 		LocalDate lt = LocalDate.now();
-		System.out.println(lt);
-		boolean before = lt.isBefore(startDate);
-		System.out.println(lt.isBefore(startDate));
-
-		if (before) {
-			if (userRegisterRepo.findByPnr(pnr).isPresent()) {
-
-				return userRegisterRepo.removeByPnr(pnr);
-			} else {
-				throw new UserDefinedException("Please enter correct PNR Number .. !!");
-			}
-		} else {
+		LocalDate CurrentBookingDate = lt.plusDays(1);
+		System.out.println(CurrentBookingDate);
+		if (startDate.equals(CurrentBookingDate)) {
 			throw new UserDefinedException("Before 24 hrs ticket cancel is not possible ");
+		} else if (userRegisterRepo.findByPnr(pnr).isPresent()) {
+			return userRegisterRepo.removeByPnr(pnr);
+		} else {
+			throw new UserDefinedException("Please enter correct PNR Number .. !!");
 		}
 	}
+//		System.out.println(lt);
+//		boolean before = lt.isBefore(startDate);
+//		System.out.println(lt.isBefore(startDate));
+
+//		if (before) {
+//			if (userRegisterRepo.findByPnr(pnr).isPresent()) {
+//
+//				return userRegisterRepo.removeByPnr(pnr);
+//			} else {
+//				throw new UserDefinedException("Please enter correct PNR Number .. !!");
+//			}
+//		} else {
+//			throw new UserDefinedException("Before 24 hrs ticket cancel is not possible ");
+//		}
+//	}
 
 }

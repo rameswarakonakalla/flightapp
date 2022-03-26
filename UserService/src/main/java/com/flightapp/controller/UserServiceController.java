@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flightapp.exception.UserExistsException;
 import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.AuthResponse;
-import com.flightapp.model.LoginDetails;
 import com.flightapp.model.UserData;
 import com.flightapp.service.AdminServices;
 import com.flightapp.service.UserServices;

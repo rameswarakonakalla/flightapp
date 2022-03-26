@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.flightapp.exception.UserExistsException;
 import com.flightapp.model.AuthResponse;
-import com.flightapp.model.LoginDetails;
 import com.flightapp.model.UserData;
 import com.flightapp.repository.UserRepository;
 import com.flightapp.service.UserServices;

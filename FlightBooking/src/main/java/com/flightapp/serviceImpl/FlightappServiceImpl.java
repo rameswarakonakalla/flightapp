@@ -9,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.flightapp.exception.AdminLoginFailedException;
 import com.flightapp.exception.UserDefinedException;
-import com.flightapp.model.AdminLoginDetails;
 import com.flightapp.model.Flightapp;
 import com.flightapp.repo.FlightappRepo;
 import com.flightapp.service.FlightappService;
@@ -35,9 +33,9 @@ public class FlightappServiceImpl implements FlightappService {
 				|| flightapp.getScheduledDays().equalsIgnoreCase("WeekDays")
 				|| flightapp.getScheduledDays().equalsIgnoreCase("Weekends")) {
 
-			if(flightapp.getRoundTrip()) {
+			if (flightapp.getRoundTrip()) {
 				flightapp.setRoundTripCost(flightapp.getTicketCost() * 2);
-			}else {
+			} else {
 				flightapp.setRoundTripCost(flightapp.getTicketCost());
 			}
 			flightapp.setFlightStatus(true);
@@ -70,19 +68,6 @@ public class FlightappServiceImpl implements FlightappService {
 
 	}
 
-	@Override
-	public Boolean adminLogin(AdminLoginDetails adminlogin) {
-
-//		AdminLoginDetails save = adminRepo.save(adminlogin);
-//		System.out.println(save);
-		if (adminlogin.getUsername().equalsIgnoreCase("admin") == adminlogin.getPassword().equalsIgnoreCase("admin")) {
-			return true;
-		} else {
-			throw new AdminLoginFailedException("Admin Access Denied ..!! ,, Try Again ...!!!");
-		}
-
-	}
-
 	public ResponseEntity<Object> searchFlight(Flightapp flightapp) {
 
 		List<String> validatesearchFlight = FlightppUtiluty.validatesearchFlight(flightapp);
@@ -92,10 +77,11 @@ public class FlightappServiceImpl implements FlightappService {
 			return prepareBadRequest;
 
 		} else {
-			List<Flightapp> findByFromplaceAndToplace = repo.findByFromplaceAndToplaceAndStartDate(flightapp.getFromplace(),
-					flightapp.getToplace() , flightapp.getStartDate());
-			if(findByFromplaceAndToplace.isEmpty()) {
-				 throw new UserDefinedException("No Flights Found on this Date " + flightapp.getStartDate() + "	!!!  Modify your search and Try again ...");
+			List<Flightapp> findByFromplaceAndToplace = repo.findByFromplaceAndToplaceAndStartDate(
+					flightapp.getFromplace(), flightapp.getToplace(), flightapp.getStartDate());
+			if (findByFromplaceAndToplace.isEmpty()) {
+				throw new UserDefinedException("No Flights Found on this Date " + flightapp.getStartDate()
+						+ "	!!!  Modify your search and Try again ...");
 			}
 			return new ResponseEntity<Object>(
 					findByFromplaceAndToplace.stream().filter(p -> p.getFlightStatus()).collect(Collectors.toList()),
