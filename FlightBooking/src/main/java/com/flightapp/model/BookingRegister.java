@@ -35,6 +35,8 @@ public class BookingRegister {
 	
 	private Double totalBasePrice;
 	
+	private Boolean roundTripStatus;
+	
 	@ManyToOne
 	private Flightapp flightdetails;
 }

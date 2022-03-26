@@ -41,7 +41,7 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 			String seatNumbers = register.getSeatNumbers();
 			register.setSeatNumbers(seatNumbers);
 
-			if (findById.get().getRoundTrip()) {
+			if (register.getRoundTripStatus()) {
 				register.setTotalBasePrice(
 						findById.get().getRoundTripCost() * seatNumbers.replaceAll("\\D+", "").length());
 			} else {

@@ -22,46 +22,43 @@ public class FlightappServiceImpl implements FlightappService {
 	FlightappRepo repo;
 
 	public ResponseEntity<Object> saveFlightInfo(Flightapp flightapp) {
-
 		List<String> validateFlightapp = FlightppUtiluty.validateFlightapp(flightapp);
 		if (!validateFlightapp.isEmpty()) {
-
 			return FlightppUtiluty
 					.prepareBadRequest(FlightppUtiluty.prepareErrorMessage(validateFlightapp).getMessage());
-
 		} else if (flightapp.getScheduledDays().equalsIgnoreCase("Daily")
 				|| flightapp.getScheduledDays().equalsIgnoreCase("WeekDays")
 				|| flightapp.getScheduledDays().equalsIgnoreCase("Weekends")) {
 
-			if (flightapp.getRoundTrip()) {
-				flightapp.setRoundTripCost(flightapp.getTicketCost() * 2);
-			} else {
-				flightapp.setRoundTripCost(flightapp.getTicketCost());
-			}
+			flightapp.setRoundTripCost(flightapp.getTicketCost() * 2);
+//			flightapp.setRoundTripCost(flightapp.getTicketCost());
+//			if (flightapp.getRoundTripStatus()) {
+//				
+//			} else {
+//				
+//			}
 			flightapp.setFlightStatus(true);
 
 			List<String> seatNumber = new ArrayList<String>();
-
-			for (int i = 1; i <= flightapp.getTotalBusinessClassSeats(); i++) {
+			for (int i = 1; i <= flightapp.getTotalBusinessClassSeats() * 2; i++) {
 				if (i % 2 == 0)
-
 					seatNumber.add("B-" + i);
-
 			}
-			for (int i = 1; i <= flightapp.getTotalNonBusinessClassSeats(); i++) {
+			for (int i = 1; i <= flightapp.getTotalNonBusinessClassSeats() * 2; i++) {
 				if (i % 2 != 0)
-					;
-				seatNumber.add("NB-" + i);
-
+					seatNumber.add("NB-" + i);
 			}
 
-			String seatNumbers = seatNumber.stream().collect(Collectors.toList()).toString();
+			flightapp.setSeatNumbers(seatNumber.stream().collect(Collectors.toList()).toString());
+			if (flightapp.getMealType().equalsIgnoreCase("veg") || flightapp.getMealType().equalsIgnoreCase("Non-veg")
+					|| flightapp.getMealType().equalsIgnoreCase("none")) {
+				Flightapp save = repo.save(flightapp);
+				Integer FlightNumber = save.getFlightNumber();
+				return new ResponseEntity<>(FlightNumber, HttpStatus.OK);
+			} else {
+				return FlightppUtiluty.prepareBadRequest("Meal type should be veg/non-veg/non");
+			}
 
-			flightapp.setSeatNumbers(seatNumbers);
-
-			Flightapp save = repo.save(flightapp);
-			Integer FlightNumber = save.getFlightNumber();
-			return new ResponseEntity<>(FlightNumber, HttpStatus.OK);
 		} else {
 			return FlightppUtiluty.prepareBadRequest("Flight Scheduled on Daily / WeekDays / Weekends ");
 		}
@@ -83,6 +80,7 @@ public class FlightappServiceImpl implements FlightappService {
 				throw new UserDefinedException("No Flights Found on this Date " + flightapp.getStartDate()
 						+ "	!!!  Modify your search and Try again ...");
 			}
+			
 			return new ResponseEntity<Object>(
 					findByFromplaceAndToplace.stream().filter(p -> p.getFlightStatus()).collect(Collectors.toList()),
 					HttpStatus.OK);

@@ -25,22 +25,9 @@ public class FlightappAdminController {
 	@Autowired
 	private AuthFeign authFeign;
 
-//	@PostMapping("/admin/login")
-//	public String adminLogin(@RequestBody AdminLoginDetails details) {
-//		Boolean adminLogin = service.adminLogin(details);
-//		if (adminLogin) {
-//			return "LoginSucess";
-//		} else {
-//			throw new AdminLoginFailedException("Admin Access Denied ..!! ,, Try Again ...!!!");
-//
-//		}
-//
-//	}
-
-	@PostMapping("/airline/register")
+	@PostMapping("/airline/inventory/add")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token,
-			@RequestBody Flightapp flightapp) {
+	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token, @RequestBody Flightapp flightapp) {
 
 //		if (authFeign.getValidity(token).getBody().isValid()) {
 //			return service.saveFlightInfo(flightapp);

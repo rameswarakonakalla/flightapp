@@ -42,7 +42,7 @@ public class Flightapp {
 
 	private Double roundTripCost;
 
-	private Boolean roundTrip;
+//	private Boolean roundTripStatus;
 	
 	private Integer numberofRows;
 
