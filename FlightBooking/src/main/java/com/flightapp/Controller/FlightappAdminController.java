@@ -27,17 +27,20 @@ public class FlightappAdminController {
 
 	@PostMapping("/airline/inventory/add")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token, @RequestBody Flightapp flightapp) {
+	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token,
+			@RequestBody Flightapp flightapp) {
 
-//		if (authFeign.getValidity(token).getBody().isValid()) {
-//			return service.saveFlightInfo(flightapp);
-//		}
 		if (authFeign.getAdminValidity(token).getBody().isValid()) {
 			return service.saveFlightInfo(flightapp);
 		}
 		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 	}
 
+	@PostMapping("/search")
+	public ResponseEntity<Object> searchFlight(@RequestBody Flightapp flightapp) {
+		ResponseEntity<Object> searchFlight = service.searchFlight(flightapp);
+		return searchFlight;
+	}
 //	@PostMapping("/airline/inventory/add")
 //	public String saveInventory(@RequestHeader("Authorization") String token, @RequestBody Flightapp flightapp) {
 //
@@ -47,11 +50,5 @@ public class FlightappAdminController {
 //		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
 //
 //	}
-
-	@PostMapping("/search")
-	public ResponseEntity<Object> searchFlight(@RequestBody Flightapp flightapp) {
-		ResponseEntity<Object> searchFlight = service.searchFlight(flightapp);
-		return searchFlight;
-	}
 
 }
