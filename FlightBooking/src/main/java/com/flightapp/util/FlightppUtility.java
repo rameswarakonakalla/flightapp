@@ -12,7 +12,7 @@ import com.flightapp.model.Flightapp;
 import com.flightapp.model.ResponseMessage;
 
 
-public class FlightppUtiluty {
+public class FlightppUtility {
 
 	public static List<String> validateFlightapp(Flightapp flightapp) {
 

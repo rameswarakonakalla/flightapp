@@ -17,7 +17,7 @@ import com.flightapp.model.BookingRegister;
 import com.flightapp.repo.FlightappRepo;
 import com.flightapp.repo.BookingRegisterRepo;
 import com.flightapp.service.BookingRegisterService;
-import com.flightapp.util.FlightppUtiluty;
+import com.flightapp.util.FlightppUtility;
 
 @Service
 public class BookingRegisterServiceImpl implements BookingRegisterService {

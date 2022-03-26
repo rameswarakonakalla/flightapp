@@ -13,7 +13,7 @@ import com.flightapp.exception.UserDefinedException;
 import com.flightapp.model.Flightapp;
 import com.flightapp.repo.FlightappRepo;
 import com.flightapp.service.FlightappService;
-import com.flightapp.util.FlightppUtiluty;
+import com.flightapp.util.FlightppUtility;
 
 @Service
 public class FlightappServiceImpl implements FlightappService {
@@ -22,10 +22,10 @@ public class FlightappServiceImpl implements FlightappService {
 	FlightappRepo repo;
 
 	public ResponseEntity<Object> saveFlightInfo(Flightapp flightapp) {
-		List<String> validateFlightapp = FlightppUtiluty.validateFlightapp(flightapp);
+		List<String> validateFlightapp = FlightppUtility.validateFlightapp(flightapp);
 		if (!validateFlightapp.isEmpty()) {
-			return FlightppUtiluty
-					.prepareBadRequest(FlightppUtiluty.prepareErrorMessage(validateFlightapp).getMessage());
+			return FlightppUtility
+					.prepareBadRequest(FlightppUtility.prepareErrorMessage(validateFlightapp).getMessage());
 		} else if (flightapp.getScheduledDays().equalsIgnoreCase("Daily")
 				|| flightapp.getScheduledDays().equalsIgnoreCase("WeekDays")
 				|| flightapp.getScheduledDays().equalsIgnoreCase("Weekends")) {
@@ -56,21 +56,21 @@ public class FlightappServiceImpl implements FlightappService {
 				Integer FlightNumber = save.getFlightNumber();
 				return new ResponseEntity<>(FlightNumber, HttpStatus.OK);
 			} else {
-				return FlightppUtiluty.prepareBadRequest("Meal type should be veg/non-veg/non");
+				return FlightppUtility.prepareBadRequest("Meal type should be veg/non-veg/non");
 			}
 
 		} else {
-			return FlightppUtiluty.prepareBadRequest("Flight Scheduled on Daily / WeekDays / Weekends ");
+			return FlightppUtility.prepareBadRequest("Flight Scheduled on Daily / WeekDays / Weekends ");
 		}
 
 	}
 
 	public ResponseEntity<Object> searchFlight(Flightapp flightapp) {
 
-		List<String> validatesearchFlight = FlightppUtiluty.validatesearchFlight(flightapp);
+		List<String> validatesearchFlight = FlightppUtility.validatesearchFlight(flightapp);
 		if (!validatesearchFlight.isEmpty()) {
-			ResponseEntity<Object> prepareBadRequest = FlightppUtiluty
-					.prepareBadRequest(FlightppUtiluty.prepareErrorMessage(validatesearchFlight).getMessage());
+			ResponseEntity<Object> prepareBadRequest = FlightppUtility
+					.prepareBadRequest(FlightppUtility.prepareErrorMessage(validatesearchFlight).getMessage());
 			return prepareBadRequest;
 
 		} else {
