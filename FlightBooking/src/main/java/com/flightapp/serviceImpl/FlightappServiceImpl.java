@@ -119,7 +119,6 @@ public class FlightappServiceImpl implements FlightappService {
 			return FlightppUtility.prepareBadRequest("Flight ID is required ");
 		}
 
-//		return "Flight Id " + flightapp.getFlightNumber() + " Details Updated ";
 	}
 
 }
