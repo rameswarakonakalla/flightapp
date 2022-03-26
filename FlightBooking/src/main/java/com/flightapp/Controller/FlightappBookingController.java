@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,7 @@ public class FlightappBookingController {
 	AuthFeign authFeign ; 
 	
 	@PostMapping("/booking/{flightNumber}")
-	public String bookFlightTicket(@RequestHeader("Authorization") String token , @RequestBody BookingRegister register, @PathVariable Integer flightNumber) {
+	public ResponseEntity<Object> bookFlightTicket(@RequestHeader("Authorization") String token , @RequestBody BookingRegister register, @PathVariable Integer flightNumber) {
 
 		if(authFeign.getValidity(token).getBody().isValid()) {
 			return service.bookFlightTicket(register, flightNumber);

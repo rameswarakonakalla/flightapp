@@ -9,7 +9,7 @@ import com.flightapp.model.BookingRegister;
 
 public interface BookingRegisterService {
 
-	String bookFlightTicket(BookingRegister register , Integer id);
+	ResponseEntity<Object> bookFlightTicket(BookingRegister register , Integer id);
 
 	Optional<BookingRegister> getBookingDetails(String pnr);
 

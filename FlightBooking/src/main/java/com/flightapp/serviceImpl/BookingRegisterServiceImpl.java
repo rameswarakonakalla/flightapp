@@ -17,6 +17,7 @@ import com.flightapp.model.BookingRegister;
 import com.flightapp.repo.FlightappRepo;
 import com.flightapp.repo.BookingRegisterRepo;
 import com.flightapp.service.BookingRegisterService;
+import com.flightapp.util.BookingUtility;
 import com.flightapp.util.FlightppUtility;
 
 @Service
@@ -28,35 +29,45 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 	@Autowired
 	FlightappRepo flightappRepo;
 
-	public String bookFlightTicket(BookingRegister register, Integer flightNumber) {
+	public ResponseEntity<Object> bookFlightTicket(BookingRegister register, Integer flightNumber) {
 
+		List<String> validateBookingRegister = BookingUtility.validateBookingRegister(register);
 		Optional<Flightapp> findById = flightappRepo.findById(flightNumber);
+		if (!validateBookingRegister.isEmpty()) {
+			return BookingUtility
+					.prepareBadRequest(BookingUtility.prepareErrorMessage(validateBookingRegister).getMessage());
 
-		Flightapp findByFlightNumber = flightappRepo.findByFlightNumber(flightNumber);
+		} else if (findById.isPresent()) {
 
-		if (findById.isPresent()) {
+			Flightapp findByFlightNumber = flightappRepo.findByFlightNumber(flightNumber);
 
-			register.setFlightNumber(flightNumber);
-			register.setFlightdetails(findByFlightNumber);
-			String seatNumbers = register.getSeatNumbers();
-			register.setSeatNumbers(seatNumbers);
+			if (register.getMealType().equalsIgnoreCase("veg") || register.getMealType().equalsIgnoreCase("Non-veg")
+					|| register.getMealType().equalsIgnoreCase("none")) {
+				register.setFlightNumber(flightNumber);
+				register.setFlightdetails(findByFlightNumber);
+				String seatNumbers = register.getSeatNumbers();
+				register.setSeatNumbers(seatNumbers);
 
-			if (register.getRoundTripStatus()) {
-				register.setTotalBasePrice(
-						findById.get().getRoundTripCost() * seatNumbers.replaceAll("\\D+", "").length());
+				if (register.getRoundTripStatus()) {
+					register.setTotalBasePrice(
+							findById.get().getRoundTripCost() * seatNumbers.replaceAll("\\D+", "").length());
+				} else {
+					register.setTotalBasePrice(
+							findById.get().getTicketCost() * seatNumbers.replaceAll("\\D+", "").length());
+				}
+				System.out.println(seatNumbers);
+				Random rnd = new Random();
+				int number = rnd.nextInt(999999);
+				String pnr = String.format("%06d", number);
+				register.setPnr(pnr);
+				userRegisterRepo.save(register);
+				return new ResponseEntity<Object>(" PNR " + register.getPnr(), HttpStatus.OK);
 			} else {
-				register.setTotalBasePrice(
-						findById.get().getTicketCost() * seatNumbers.replaceAll("\\D+", "").length());
+				return BookingUtility.prepareBadRequest("Meal type should be veg/non-veg/non");
 			}
-			System.out.println(seatNumbers);
-			Random rnd = new Random();
-			int number = rnd.nextInt(999999);
-			String pnr = String.format("%06d", number);
-			register.setPnr(pnr);
-			userRegisterRepo.save(register);
-			return " PNR " + register.getPnr();
 		} else {
-			throw new UserDefinedException("Please enter correct details .. !!");
+			return BookingUtility
+					.prepareBadRequest("Flight number is Not found... , Please enter correct details .. !!");
 		}
 
 	}
