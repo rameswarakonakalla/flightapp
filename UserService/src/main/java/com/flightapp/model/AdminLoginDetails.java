@@ -1,5 +1,6 @@
 package com.flightapp.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,9 +17,9 @@ import lombok.NoArgsConstructor;
 public class AdminLoginDetails {
 	
 		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		private Integer id;
+		@Column
 	    private String username;
+		@Column
 	    private String password;
 	   
 	    
