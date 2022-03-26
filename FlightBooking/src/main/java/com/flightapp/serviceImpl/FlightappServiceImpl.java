@@ -80,7 +80,7 @@ public class FlightappServiceImpl implements FlightappService {
 				throw new UserDefinedException("No Flights Found on this Date " + flightapp.getStartDate()
 						+ "	!!!  Modify your search and Try again ...");
 			}
-			
+
 			return new ResponseEntity<Object>(
 					findByFromplaceAndToplace.stream().filter(p -> p.getFlightStatus()).collect(Collectors.toList()),
 					HttpStatus.OK);

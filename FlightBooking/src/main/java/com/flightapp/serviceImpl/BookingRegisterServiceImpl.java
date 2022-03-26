@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 
 import com.flightapp.exception.UserDefinedException;
 import com.flightapp.model.Flightapp;
+import com.flightapp.model.UserData;
 import com.flightapp.model.BookingRegister;
 import com.flightapp.repo.FlightappRepo;
+import com.flightapp.repo.UserRepository;
 import com.flightapp.repo.BookingRegisterRepo;
 import com.flightapp.service.BookingRegisterService;
 import com.flightapp.util.BookingUtility;
@@ -24,10 +26,13 @@ import com.flightapp.util.FlightppUtility;
 public class BookingRegisterServiceImpl implements BookingRegisterService {
 
 	@Autowired
-	BookingRegisterRepo userRegisterRepo;
+	BookingRegisterRepo bookRegisterRepo;
 
 	@Autowired
 	FlightappRepo flightappRepo;
+
+	@Autowired
+	UserRepository userRepo;
 
 	public ResponseEntity<Object> bookFlightTicket(BookingRegister register, Integer flightNumber) {
 
@@ -43,25 +48,33 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 
 			if (register.getMealType().equalsIgnoreCase("veg") || register.getMealType().equalsIgnoreCase("Non-veg")
 					|| register.getMealType().equalsIgnoreCase("none")) {
-				register.setFlightNumber(flightNumber);
-				register.setFlightdetails(findByFlightNumber);
-				String seatNumbers = register.getSeatNumbers();
-				register.setSeatNumbers(seatNumbers);
 
-				if (register.getRoundTripStatus()) {
-					register.setTotalBasePrice(
-							findById.get().getRoundTripCost() * seatNumbers.replaceAll("\\D+", "").length());
+				Optional<UserData> findByEmailid = userRepo.findByEmailid(register.getEmailId());
+				if (findByEmailid.isPresent()) {
+					register.setFlightNumber(flightNumber);
+					register.setFlightdetails(findByFlightNumber);
+					String seatNumbers = register.getSeatNumbers();
+					register.setSeatNumbers(seatNumbers);
+
+					if (register.getRoundTripStatus()) {
+						register.setTotalBasePrice(
+								findById.get().getRoundTripCost() * seatNumbers.replaceAll("\\D+", "").length());
+					} else {
+						register.setTotalBasePrice(
+								findById.get().getTicketCost() * seatNumbers.replaceAll("\\D+", "").length());
+					}
+					System.out.println(seatNumbers);
+					Random rnd = new Random();
+					int number = rnd.nextInt(999999);
+					String pnr = String.format("%06d", number);
+					register.setPnr(pnr);
+					bookRegisterRepo.save(register);
+					return new ResponseEntity<Object>(" PNR " + register.getPnr(), HttpStatus.OK);
 				} else {
-					register.setTotalBasePrice(
-							findById.get().getTicketCost() * seatNumbers.replaceAll("\\D+", "").length());
+					return BookingUtility.prepareBadRequest(
+							register.getEmailId() + " Do you don't have an Account .???   ...please register");
 				}
-				System.out.println(seatNumbers);
-				Random rnd = new Random();
-				int number = rnd.nextInt(999999);
-				String pnr = String.format("%06d", number);
-				register.setPnr(pnr);
-				userRegisterRepo.save(register);
-				return new ResponseEntity<Object>(" PNR " + register.getPnr(), HttpStatus.OK);
+
 			} else {
 				return BookingUtility.prepareBadRequest("Meal type should be veg/non-veg/non");
 			}
@@ -75,7 +88,7 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 	@Override
 	public Optional<BookingRegister> getBookingDetails(String pnr) {
 
-		Optional<BookingRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
+		Optional<BookingRegister> findByPnr = bookRegisterRepo.findByPnr(pnr);
 		if (findByPnr.isPresent()) {
 			// register.setFlightdetails(findById);
 			return findByPnr;
@@ -86,7 +99,7 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 
 	@Override
 	public List<BookingRegister> getBookingDetailsBasedOnEmail(String emailId) {
-		List<BookingRegister> findByEmailId = userRegisterRepo.findByEmailId(emailId);
+		List<BookingRegister> findByEmailId = bookRegisterRepo.findByEmailId(emailId);
 		if (findByEmailId.isEmpty()) {
 			throw new UserDefinedException("Please enter Correct Email id .. !!");
 		}
@@ -96,34 +109,20 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 
 	@Override
 	public Optional<BookingRegister> deleteBookingDetails(String pnr) {
-		Optional<BookingRegister> findByPnr = userRegisterRepo.findByPnr(pnr);
-		LocalDate startDate = findByPnr.get().getFlightdetails().getStartDate();
-		System.out.println(startDate);
-		LocalDate lt = LocalDate.now();
-		LocalDate CurrentBookingDate = lt.plusDays(1);
-		System.out.println(CurrentBookingDate);
-		if (startDate.equals(CurrentBookingDate)) {
-			throw new UserDefinedException("Before 24 hrs ticket cancel is not possible ");
-		} else if (userRegisterRepo.findByPnr(pnr).isPresent()) {
-			return userRegisterRepo.removeByPnr(pnr);
+		Optional<BookingRegister> findByPnr = bookRegisterRepo.findByPnr(pnr);
+		if (findByPnr.isPresent()) {
+			LocalDate startDate = findByPnr.get().getFlightdetails().getStartDate();
+			System.out.println(startDate);
+			LocalDate lt = LocalDate.now();
+			LocalDate CurrentBookingDate = lt.plusDays(1);
+			System.out.println(CurrentBookingDate);
+			if (startDate.equals(CurrentBookingDate)) {
+				throw new UserDefinedException("Before 24 hrs ticket cancel is not possible ");
+			} else {
+				return bookRegisterRepo.removeByPnr(pnr);
+			}
 		} else {
 			throw new UserDefinedException("Please enter correct PNR Number .. !!");
 		}
 	}
-//		System.out.println(lt);
-//		boolean before = lt.isBefore(startDate);
-//		System.out.println(lt.isBefore(startDate));
-
-//		if (before) {
-//			if (userRegisterRepo.findByPnr(pnr).isPresent()) {
-//
-//				return userRegisterRepo.removeByPnr(pnr);
-//			} else {
-//				throw new UserDefinedException("Please enter correct PNR Number .. !!");
-//			}
-//		} else {
-//			throw new UserDefinedException("Before 24 hrs ticket cancel is not possible ");
-//		}
-//	}
-
 }
