@@ -46,13 +46,20 @@ public class FlightappServiceImpl implements FlightappService {
 			}
 
 			flightapp.setSeatNumbers(seatNumber.stream().collect(Collectors.toList()).toString());
-			if (flightapp.getMealType().equalsIgnoreCase("veg") || flightapp.getMealType().equalsIgnoreCase("Non-veg")
-					|| flightapp.getMealType().equalsIgnoreCase("none")) {
-				Flightapp save = repo.save(flightapp);
-				Integer FlightNumber = save.getFlightNumber();
-				return new ResponseEntity<>(FlightNumber, HttpStatus.OK);
+			System.out.println(flightapp.getStartDate().isAfter(flightapp.getEndDate()));
+			if (flightapp.getStartDate().isBefore(flightapp.getEndDate())) {
+				if (flightapp.getMealType().equalsIgnoreCase("veg")
+						|| flightapp.getMealType().equalsIgnoreCase("Non-veg")
+						|| flightapp.getMealType().equalsIgnoreCase("none")) {
+					Flightapp save = repo.save(flightapp);
+					Integer FlightNumber = save.getFlightNumber();
+					return new ResponseEntity<>(FlightNumber, HttpStatus.OK);
+				} else {
+					return FlightppUtility.prepareBadRequest("Meal type should be veg/non-veg/non");
+				}
+
 			} else {
-				return FlightppUtility.prepareBadRequest("Meal type should be veg/non-veg/non");
+				return FlightppUtility.prepareBadRequest("End Date should be Greater than start date ");
 			}
 
 		} else {

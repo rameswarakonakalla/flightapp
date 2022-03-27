@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.FutureOrPresent;
 
 import lombok.Data;
 
@@ -22,11 +23,12 @@ public class Flightapp {
 	private String fromplace;
 	private String toplace;
 
-	
+	@FutureOrPresent(message = "StartDate should be present or future only")
 	private LocalDate startDate;
 
 	private String depatureTime;
 	
+	@FutureOrPresent(message = "StartDate should be present or future only")
 	private LocalDate endDate;
 	
 	private String arrivalTime;

@@ -2,6 +2,8 @@ package com.flightapp.exception;
 
 import java.time.LocalDateTime;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,5 +30,14 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(
 				new ResponseForException(invalidTokenException.getMessage(), LocalDateTime.now(), HttpStatus.UNAUTHORIZED),
 				HttpStatus.UNAUTHORIZED);
+	}
+	
+	
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<Object> ConstraintViolationException(ConstraintViolationException ex) {
+
+		return new ResponseEntity<>(new ResponseForException(ex.getMessage(), LocalDateTime.now(),
+				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

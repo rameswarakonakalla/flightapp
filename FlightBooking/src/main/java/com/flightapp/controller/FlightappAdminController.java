@@ -1,5 +1,7 @@
 package com.flightapp.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class FlightappAdminController {
 	@PostMapping("/airline/inventory/add")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public ResponseEntity<Object> saveFlightInfo(@RequestHeader("Authorization") String token,
-			@RequestBody Flightapp flightapp) {
+			 @RequestBody Flightapp flightapp) {
 
 		if (authFeign.getAdminValidity(token).getBody().isValid()) {
 			return service.saveFlightInfo(flightapp);
