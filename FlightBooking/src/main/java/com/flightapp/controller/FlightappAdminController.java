@@ -1,4 +1,4 @@
-package com.flightapp.Controller;
+package com.flightapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.flightapp.Controller;
+package com.flightapp.controller;
 
 import java.util.List;
 import java.util.Optional;
