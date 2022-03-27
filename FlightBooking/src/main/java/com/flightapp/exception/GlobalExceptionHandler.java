@@ -1,7 +1,6 @@
 package com.flightapp.exception;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
