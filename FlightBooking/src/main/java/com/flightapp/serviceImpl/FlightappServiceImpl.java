@@ -102,19 +102,19 @@ public class FlightappServiceImpl implements FlightappService {
 				flightappDetailsUpdate.setAirline(flightappupdate.getAirline());
 			}
 
-			if (flightappupdate.getAirline() == null) {
+			if (flightappupdate.getFromplace() == null) {
 				flightappDetailsUpdate.setFromplace(flightappDetailsUpdate.getFromplace());
 			} else {
 				flightappDetailsUpdate.setFromplace(flightappupdate.getFromplace());
 			}
 
-			if (flightappupdate.getAirline() == null) {
+			if (flightappupdate.getToplace() == null) {
 				flightappDetailsUpdate.setToplace(flightappDetailsUpdate.getToplace());
 			} else {
 				flightappDetailsUpdate.setToplace(flightappupdate.getToplace());
 			}
 
-			if (flightappupdate.getAirline() == null) {
+			if (flightappupdate.getFlightStatus() == null) {
 				flightappDetailsUpdate.setFlightStatus(flightappDetailsUpdate.getFlightStatus());
 			} else {
 				flightappDetailsUpdate.setFlightStatus(flightappupdate.getFlightStatus());
@@ -123,7 +123,7 @@ public class FlightappServiceImpl implements FlightappService {
 			repo.save(flightappDetailsUpdate);
 			return new ResponseEntity<Object>("Deatils Updated ", HttpStatus.OK);
 		} else {
-			return FlightppUtility.prepareBadRequest("Flight ID is required ");
+			return FlightppUtility.prepareBadRequest("Flight ID is not active/avalible ");
 		}
 
 	}
