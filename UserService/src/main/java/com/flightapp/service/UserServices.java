@@ -15,7 +15,4 @@ public interface UserServices {
 	
 	
 	
-	//public ResponseEntity<Object> getAllUsers();
-	//public ResponseEntity<Object> searchByUsername(String username);
-	//public ResponseEntity<Object> forgotPassword(LoginDetails data);
 }
