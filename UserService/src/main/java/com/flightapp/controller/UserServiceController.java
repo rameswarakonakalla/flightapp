@@ -48,14 +48,12 @@ public class UserServiceController {
 	
 	@GetMapping(value = "/validate")
 	public ResponseEntity<AuthResponse> getValidity(@RequestHeader("Authorization") final String token) {
-		System.out.println("in side method {}" + token);
 		return userService.validate(token);
 	}
 
 
 	@GetMapping(value = "/adminvalidate")
 	public ResponseEntity<AuthResponse> getAdminValidity(@RequestHeader("Authorization") final String token) {
-		System.out.println("in side method {}" + token);
 		return adminServices.adminValidate(token);
 	}
 

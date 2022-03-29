@@ -19,7 +19,7 @@ import com.flightapp.service.AdminServices;
 import com.flightapp.service.UserServices;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceControllerTest {
+class UserServiceControllerTest {
 	@Mock
 	UserServices userServices;
 	
