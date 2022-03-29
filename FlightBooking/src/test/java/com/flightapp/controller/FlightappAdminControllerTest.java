@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.flightapp.feignClients.AuthFeign;
+import com.flightapp.feignclients.AuthFeign;
 import com.flightapp.model.AuthResponse;
 import com.flightapp.model.Flightapp;
 import com.flightapp.service.FlightappService;

@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(UserDefinedException.class)
-	public ResponseEntity<Object> BookingFailedException(UserDefinedException ex) {
+	public ResponseEntity<Object> bookingFailedException(UserDefinedException ex) {
 
 		return new ResponseEntity<>(new ResponseForException(ex.getMessage(), LocalDateTime.now(),
 				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 	
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<Object> ConstraintViolationException(ConstraintViolationException ex) {
+	public ResponseEntity<Object> constraintViolationException(ConstraintViolationException ex) {
 
 		return new ResponseEntity<>(new ResponseForException(ex.getMessage(), LocalDateTime.now(),
 				HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);

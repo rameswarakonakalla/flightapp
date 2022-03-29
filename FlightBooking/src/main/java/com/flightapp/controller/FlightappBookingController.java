@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flightapp.exception.InvalidTokenException;
-import com.flightapp.feignClients.AuthFeign;
+import com.flightapp.feignclients.AuthFeign;
 import com.flightapp.model.BookingRegister;
 import com.flightapp.model.SelectedSeats;
 import com.flightapp.service.BookingRegisterService;
@@ -31,13 +31,14 @@ public class FlightappBookingController {
 	@Autowired
 	AuthFeign authFeign ; 
 	
+	private static final String INVALIDTOKENEXCEPTIONMESSAGE = "Token Expired or Invalid , Login again ... ";
 	@PostMapping("/booking/{flightNumber}")
 	public ResponseEntity<Object> bookFlightTicket(@RequestHeader("Authorization") String token , @RequestBody BookingRegister register, @PathVariable Integer flightNumber , SelectedSeats seats) {
 
 		if(authFeign.getValidity(token).getBody().isValid()) {
 			return service.bookFlightTicket(register, flightNumber , seats);
 		}
-		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
+		throw new InvalidTokenException(INVALIDTOKENEXCEPTIONMESSAGE);
 		
 
 	}
@@ -50,7 +51,7 @@ public class FlightappBookingController {
 		if(authFeign.getValidity(token).getBody().isValid()) {
 			return service.getBookingDetails(pnr);
 		}
-		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
+		throw new InvalidTokenException(INVALIDTOKENEXCEPTIONMESSAGE);
 	}
 
 	@GetMapping("booking/history/{emailId}")
@@ -60,7 +61,7 @@ public class FlightappBookingController {
 		if(authFeign.getValidity(token).getBody().isValid()) {
 			return service.getBookingDetailsBasedOnEmail(emailId);
 		}
-		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
+		throw new InvalidTokenException(INVALIDTOKENEXCEPTIONMESSAGE);
 	}
 
 	@DeleteMapping("booking/cancel/{pnr}")
@@ -71,7 +72,7 @@ public class FlightappBookingController {
 			
 			return pnr + " Details Deleted SucessFull ";
 		}
-		throw new InvalidTokenException("Token Expired or Invalid , Login again ...");
+		throw new InvalidTokenException(INVALIDTOKENEXCEPTIONMESSAGE);
 		
 
 	}

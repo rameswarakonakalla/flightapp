@@ -12,6 +12,10 @@ import com.flightapp.model.ResponseMessage;
 
 public class BookingUtility {
 
+	private BookingUtility() {
+		super();
+	}
+
 	public static List<String> validateBookingRegister(BookingRegister bookingRegister) {
 
 		List<String> error = new ArrayList<>();

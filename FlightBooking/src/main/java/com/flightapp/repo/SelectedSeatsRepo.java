@@ -17,10 +17,4 @@ public interface SelectedSeatsRepo extends JpaRepository<SelectedSeats, Integer>
 	
 	@Transactional
 	Optional<SelectedSeats> removeByPnr(String pnr);
-//	
-//	
-//	INSERT INTO `flightappschema`.`selected_seats` (`email`, `flight_number`, `pnr`, `seat_numbers`, `start_date`) VALUES ('k@g', '1', '32', 'dd', 'eee');
-//	
-//	@Query(value ="insert into selectedSeats(email,flightNumber,pnr,seatNumbers,startDate"  values = "?,?,?,?,?");
-//	void saveAs(SelectedSeats seats);
 }

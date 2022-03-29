@@ -1,4 +1,4 @@
-package com.flightapp.serviceImpl;
+package com.flightapp.serviceimpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,7 +48,8 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 
 		} else if (findById.isPresent()) {
 			Flightapp findByFlightNumber = flightappRepo.findByFlightNumber(flightNumber);
-			if (findByFlightNumber.getFlightStatus()) {
+			Boolean flightStatus = findByFlightNumber.getFlightStatus();
+			if (Boolean.TRUE.equals(flightStatus)) {
 				if (register.getMealType().equalsIgnoreCase("veg") || register.getMealType().equalsIgnoreCase("Non-veg")
 						|| register.getMealType().equalsIgnoreCase("none")) {
 
@@ -61,7 +62,6 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 						Optional<SelectedSeats> findBystartDateAndseatNumbers = selectedSeatsRepo
 								.findByStartDateAndSeatNumbersAndFlightNumber(findByFlightNumber.getStartDate(),
 										seatNumbers, findById.get().getFlightNumber());
-						System.out.println(findBystartDateAndseatNumbers);
 
 						if (findBystartDateAndseatNumbers.isEmpty()) {
 
@@ -75,19 +75,18 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 							seats.setStartDate(findByFlightNumber.getStartDate());
 							seats.setEmail(register.getEmailId());
 							seats.setSeatNumbers(seatNumbers);
-
-							if (register.getRoundTripStatus()) {
+							Boolean roundTripStatus = register.getRoundTripStatus();
+							if (Boolean.TRUE.equals(roundTripStatus)) {
 								register.setTotalBasePrice(findById.get().getRoundTripCost()
 										* seatNumbers.replaceAll("\\D+", "").length());
 							} else {
 								register.setTotalBasePrice(
 										findById.get().getTicketCost() * seatNumbers.replaceAll("\\D+", "").length());
 							}
-							System.out.println(seatNumbers);
 
 							selectedSeatsRepo.save(seats);
 							bookRegisterRepo.save(register);
-							return new ResponseEntity<Object>(" PNR " + register.getPnr(), HttpStatus.OK);
+							return new ResponseEntity<>(" PNR " + register.getPnr(), HttpStatus.OK);
 						} else {
 							return BookingUtility.prepareBadRequest(seatNumbers + " Already Booked");
 						}
@@ -116,7 +115,6 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 
 		Optional<BookingRegister> findByPnr = bookRegisterRepo.findByPnr(pnr);
 		if (findByPnr.isPresent()) {
-			// register.setFlightdetails(findById);
 			return findByPnr;
 		} else {
 			throw new UserDefinedException("Please enter correct PNR Number .. !!");
@@ -138,11 +136,9 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 		Optional<BookingRegister> findByPnr = bookRegisterRepo.findByPnr(pnr);
 		if (findByPnr.isPresent()) {
 			LocalDate startDate = findByPnr.get().getFlightdetails().getStartDate();
-			System.out.println(startDate);
 			LocalDate lt = LocalDate.now();
-			LocalDate CurrentBookingDate = lt.plusDays(1);
-			System.out.println(CurrentBookingDate);
-			if (startDate.equals(CurrentBookingDate)) {
+			LocalDate currentBookingDate = lt.plusDays(1);
+			if (startDate.equals(currentBookingDate)) {
 				throw new UserDefinedException("Before 24 hrs ticket cancel is not possible ");
 			} else {
 				selectedSeatsRepo.removeByPnr(pnr);

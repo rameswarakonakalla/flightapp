@@ -1,4 +1,4 @@
-package com.flightapp.serviceImpl;
+package com.flightapp.serviceimpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +34,7 @@ public class FlightappServiceImpl implements FlightappService {
 
 			flightapp.setRoundTripCost(flightapp.getTicketCost() * 2);
 			flightapp.setFlightStatus(true);
-
-			List<String> seatNumber = new ArrayList<String>();
+			List<String> seatNumber = new ArrayList<>();
 			for (int i = 1; i <= flightapp.getTotalBusinessClassSeats() * 2; i++) {
 				if (i % 2 == 0)
 					seatNumber.add("B-" + i);
@@ -46,14 +45,13 @@ public class FlightappServiceImpl implements FlightappService {
 			}
 
 			flightapp.setSeatNumbers(seatNumber.stream().collect(Collectors.toList()).toString());
-			System.out.println(flightapp.getStartDate().isAfter(flightapp.getEndDate()));
 			if (flightapp.getStartDate().isBefore(flightapp.getEndDate())) {
 				if (flightapp.getMealType().equalsIgnoreCase("veg")
 						|| flightapp.getMealType().equalsIgnoreCase("Non-veg")
 						|| flightapp.getMealType().equalsIgnoreCase("none")) {
 					Flightapp save = repo.save(flightapp);
-					Integer FlightNumber = save.getFlightNumber();
-					return new ResponseEntity<>(FlightNumber, HttpStatus.OK);
+					Integer flightNumber = save.getFlightNumber();
+					return new ResponseEntity<>(flightNumber, HttpStatus.OK);
 				} else {
 					return FlightppUtility.prepareBadRequest("Meal type should be veg/non-veg/non");
 				}
@@ -72,19 +70,18 @@ public class FlightappServiceImpl implements FlightappService {
 
 		List<String> validatesearchFlight = FlightppUtility.validatesearchFlight(flightapp);
 		if (!validatesearchFlight.isEmpty()) {
-			ResponseEntity<Object> prepareBadRequest = FlightppUtility
+			return FlightppUtility
 					.prepareBadRequest(FlightppUtility.prepareErrorMessage(validatesearchFlight).getMessage());
-			return prepareBadRequest;
 
 		} else {
 			List<Flightapp> findByFromplaceAndToplace = repo.findByFromplaceAndToplaceAndStartDate(
 					flightapp.getFromplace(), flightapp.getToplace(), flightapp.getStartDate());
 			if (findByFromplaceAndToplace.isEmpty()) {
 				throw new UserDefinedException("No Flights Found on this Date " + flightapp.getStartDate()
-						+ "	!!!  Modify your search and Try again ...");
+						+ " !!!  Modify your search and Try again ...");
 			}
 
-			return new ResponseEntity<Object>(
+			return new ResponseEntity<>(
 					findByFromplaceAndToplace.stream().filter(p -> p.getFlightStatus()).collect(Collectors.toList()),
 					HttpStatus.OK);
 		}
@@ -121,7 +118,7 @@ public class FlightappServiceImpl implements FlightappService {
 			}
 
 			repo.save(flightappDetailsUpdate);
-			return new ResponseEntity<Object>("Deatils Updated ", HttpStatus.OK);
+			return new ResponseEntity<>("Deatils Updated ", HttpStatus.OK);
 		} else {
 			return FlightppUtility.prepareBadRequest("Flight ID is not active/avalible ");
 		}

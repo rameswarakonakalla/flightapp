@@ -18,6 +18,4 @@ public interface BookingRegisterService {
 
 	Optional<BookingRegister> deleteBookingDetails(String pnr);
 
-	//public ResponseEntity<Object> deleteBookingDetails(String pnr);
-	
 }

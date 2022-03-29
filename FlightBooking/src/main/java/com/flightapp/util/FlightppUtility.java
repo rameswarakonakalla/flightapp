@@ -12,6 +12,12 @@ import com.flightapp.model.ResponseMessage;
 
 
 public class FlightppUtility {
+	
+	
+
+	private FlightppUtility() {
+		super();
+	}
 
 	public static List<String> validateFlightapp(Flightapp flightapp) {
 

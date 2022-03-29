@@ -1,4 +1,4 @@
-package com.flightapp.feignClients;
+package com.flightapp.feignclients;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

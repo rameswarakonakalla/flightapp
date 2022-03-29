@@ -9,7 +9,6 @@ public interface FlightappService {
 
 	ResponseEntity<Object> saveFlightInfo(Flightapp flightapp);
 
-//	Boolean adminLogin(AdminLoginDetails adminlogin);
 
 	ResponseEntity<Object> searchFlight(Flightapp flightapp);
 
