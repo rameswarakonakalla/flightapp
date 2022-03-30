@@ -23,25 +23,25 @@ public class BookingUtility {
 			error.add("Name");
 		}
 		if (bookingRegister.getEmailId() == null) {
-			error.add("Name");
+			error.add("E-mail id");
 		}
 		if (bookingRegister.getNoOfSeatstoBook() == null) {
-			error.add("Name");
+			error.add("No of seats");
 		}
 		if (bookingRegister.getGender() == null) {
-			error.add("Name");
+			error.add("gender");
 		}
 		if (bookingRegister.getSeatNumbers() == null) {
-			error.add("Name");
+			error.add("seat numbers");
 		}
 		if (bookingRegister.getRoundTripStatus() == null) {
-			error.add("Name");
+			error.add("Round trip status");
 		}
 		if (bookingRegister.getMealType() == null) {
-			error.add("Name");
+			error.add("meal type");
 		}
 		if (bookingRegister.getAge() == null) {
-			error.add("Name");
+			error.add("age");
 		}
 
 		return error;
