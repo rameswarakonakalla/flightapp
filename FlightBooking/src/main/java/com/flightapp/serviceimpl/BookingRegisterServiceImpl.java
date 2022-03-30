@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.flightapp.exception.UserDefinedException;
 import com.flightapp.model.BookingRegister;
 import com.flightapp.model.Flightapp;
+import com.flightapp.model.Passenger;
 import com.flightapp.model.SelectedSeats;
 import com.flightapp.model.UserData;
 import com.flightapp.repo.BookingRegisterRepo;
@@ -64,29 +65,33 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 										seatNumbers, findById.get().getFlightNumber());
 
 						if (findBystartDateAndseatNumbers.isEmpty()) {
+							if (seatNumbers.replaceAll("\\D+", "").length() == register.getPassengers().size()) {
+								Random rnd = new Random();
+								int number = rnd.nextInt(999999);
+								String pnr = String.format("%06d", number);
+								register.setPnr(pnr);
+								register.setSeatNumbers(seatNumbers);
+								seats.setFlightNumber(flightNumber);
+								seats.setPnr(pnr);
+								seats.setStartDate(findByFlightNumber.getStartDate());
+								seats.setEmail(register.getEmailId());
+								seats.setSeatNumbers(seatNumbers);
+								Boolean roundTripStatus = register.getRoundTripStatus();
+								if (Boolean.TRUE.equals(roundTripStatus)) {
+									register.setTotalBasePrice(findById.get().getRoundTripCost()
+											* seatNumbers.replaceAll("\\D+", "").length());
+								} else {
+									register.setTotalBasePrice(findById.get().getTicketCost()
+											* seatNumbers.replaceAll("\\D+", "").length());
+								}
+								selectedSeatsRepo.save(seats);
+								bookRegisterRepo.save(register);
+								return new ResponseEntity<>(" PNR " + register.getPnr(), HttpStatus.OK);
 
-							Random rnd = new Random();
-							int number = rnd.nextInt(999999);
-							String pnr = String.format("%06d", number);
-							register.setPnr(pnr);
-							register.setSeatNumbers(seatNumbers);
-							seats.setFlightNumber(flightNumber);
-							seats.setPnr(pnr);
-							seats.setStartDate(findByFlightNumber.getStartDate());
-							seats.setEmail(register.getEmailId());
-							seats.setSeatNumbers(seatNumbers);
-							Boolean roundTripStatus = register.getRoundTripStatus();
-							if (Boolean.TRUE.equals(roundTripStatus)) {
-								register.setTotalBasePrice(findById.get().getRoundTripCost()
-										* seatNumbers.replaceAll("\\D+", "").length());
 							} else {
-								register.setTotalBasePrice(
-										findById.get().getTicketCost() * seatNumbers.replaceAll("\\D+", "").length());
+								return BookingUtility.prepareBadRequest("No of seats is equal to list of passengers");
 							}
 
-							selectedSeatsRepo.save(seats);
-							bookRegisterRepo.save(register);
-							return new ResponseEntity<>(" PNR " + register.getPnr(), HttpStatus.OK);
 						} else {
 							return BookingUtility.prepareBadRequest(seatNumbers + " Already Booked");
 						}

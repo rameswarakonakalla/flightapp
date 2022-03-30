@@ -1,14 +1,24 @@
 package com.flightapp.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
 @Entity
 public class BookingRegister {
 
@@ -17,15 +27,15 @@ public class BookingRegister {
 	private Integer id ;
 	
 	
-	private String name; 
+//	private String name; 
 	
 	private String emailId;
 	
 	private Integer noOfSeatstoBook;
 	
-	private String gender;
+//	private String gender;
 	
-	private Integer age;
+//	private Integer age;
 	
 	private String pnr;
 	
@@ -41,4 +51,11 @@ public class BookingRegister {
 	
 	@ManyToOne
 	private Flightapp flightdetails;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Passenger> passengers;
+	
+	
+	
 }

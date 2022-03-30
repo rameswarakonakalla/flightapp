@@ -19,18 +19,18 @@ public class BookingUtility {
 	public static List<String> validateBookingRegister(BookingRegister bookingRegister) {
 
 		List<String> error = new ArrayList<>();
-		if (bookingRegister.getName() == null) {
-			error.add("Name");
-		}
+//		if (bookingRegister.getName() == null) {
+//			error.add("Name");
+//		}
 		if (bookingRegister.getEmailId() == null) {
 			error.add("E-mail id");
 		}
 		if (bookingRegister.getNoOfSeatstoBook() == null) {
 			error.add("No of seats");
 		}
-		if (bookingRegister.getGender() == null) {
-			error.add("gender");
-		}
+//		if (bookingRegister.getGender() == null) {
+//			error.add("gender");
+//		}
 		if (bookingRegister.getSeatNumbers() == null) {
 			error.add("seat numbers");
 		}
@@ -40,9 +40,9 @@ public class BookingUtility {
 		if (bookingRegister.getMealType() == null) {
 			error.add("meal type");
 		}
-		if (bookingRegister.getAge() == null) {
-			error.add("age");
-		}
+//		if (bookingRegister.getAge() == null) {
+//			error.add("age");
+//		}
 
 		return error;
 
