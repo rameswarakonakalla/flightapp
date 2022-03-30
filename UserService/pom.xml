@@ -16,6 +16,20 @@
 	<description>Flight app user service for login and register</description>
 	<properties>
 		<java.version>11</java.version>
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.login>admin</sonar.login>
+		<sonar.password>admin1</sonar.password>
+		<sonar.projectKey>tweetapp</sonar.projectKey>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.language>java</sonar.language>
+		<sonar.coverage.exclusions>com/iiht/tweetapp/seviceimpl/JwtUtil.class</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/config/*</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/model/*</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/repository/*</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/services/*</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/exception/*</sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
 
