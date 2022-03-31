@@ -65,7 +65,7 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 										seatNumbers, findById.get().getFlightNumber());
 
 						if (findBystartDateAndseatNumbers.isEmpty()) {
-							if (seatNumbers.replaceAll("\\D+", "").length() == register.getPassengers().size()) {
+							if (register.getNoOfSeatstoBook() == register.getPassengers().size()) {
 								Random rnd = new Random();
 								int number = rnd.nextInt(999999);
 								String pnr = String.format("%06d", number);
