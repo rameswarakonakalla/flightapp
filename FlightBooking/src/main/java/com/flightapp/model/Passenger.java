@@ -25,6 +25,7 @@ public class Passenger {
 	private String passengeName;
 	private String gender;
 	private int age;
+	private String mealType;
 
 	@JsonBackReference
 	@ManyToOne

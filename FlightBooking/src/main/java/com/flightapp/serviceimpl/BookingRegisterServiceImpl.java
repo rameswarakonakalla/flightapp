@@ -50,68 +50,60 @@ public class BookingRegisterServiceImpl implements BookingRegisterService {
 			Flightapp findByFlightNumber = flightappRepo.findByFlightNumber(flightNumber);
 			Boolean flightStatus = findByFlightNumber.getFlightStatus();
 			if (Boolean.TRUE.equals(flightStatus)) {
-				if (register.getMealType().equalsIgnoreCase("veg") || register.getMealType().equalsIgnoreCase("Non-veg")
-						|| register.getMealType().equalsIgnoreCase("none")) {
+				Optional<UserData> findByEmailid = userRepo.findByEmailid(register.getEmailId());
+				if (findByEmailid.isPresent()) {
+					register.setFlightNumber(flightNumber);
+					register.setFlightdetails(findByFlightNumber);
+					String seatNumbers = register.getSeatNumbers();
 
-					Optional<UserData> findByEmailid = userRepo.findByEmailid(register.getEmailId());
-					if (findByEmailid.isPresent()) {
-						register.setFlightNumber(flightNumber);
-						register.setFlightdetails(findByFlightNumber);
-						String seatNumbers = register.getSeatNumbers();
+					Optional<SelectedSeats> findBystartDateAndseatNumbers = selectedSeatsRepo
+							.findByStartDateAndSeatNumbersAndFlightNumber(findByFlightNumber.getStartDate(),
+									seatNumbers, findById.get().getFlightNumber());
 
-						Optional<SelectedSeats> findBystartDateAndseatNumbers = selectedSeatsRepo
-								.findByStartDateAndSeatNumbersAndFlightNumber(findByFlightNumber.getStartDate(),
-										seatNumbers, findById.get().getFlightNumber());
-
-						if (findBystartDateAndseatNumbers.isEmpty()) {
-							if (register.getNoOfSeatstoBook() == register.getPassengers().size()) {
-								Random rnd = new Random();
-								int number = rnd.nextInt(999999);
-								String pnr = String.format("%06d", number);
-								register.setPnr(pnr);
-								register.setSeatNumbers(seatNumbers);
-								seats.setFlightNumber(flightNumber);
-								seats.setPnr(pnr);
-								seats.setStartDate(findByFlightNumber.getStartDate());
-								seats.setEmail(register.getEmailId());
-								seats.setSeatNumbers(seatNumbers);
-								Boolean roundTripStatus = register.getRoundTripStatus();
-								if (Boolean.TRUE.equals(roundTripStatus)) {
-									register.setTotalBasePrice(findById.get().getRoundTripCost()
-											* seatNumbers.replaceAll("\\D+", "").length());
-								} else {
-									register.setTotalBasePrice(findById.get().getTicketCost()
-											* seatNumbers.replaceAll("\\D+", "").length());
-								}
-								selectedSeatsRepo.save(seats);
-								bookRegisterRepo.save(register);
-								return new ResponseEntity<>(" PNR " + register.getPnr(), HttpStatus.OK);
-
+					if (findBystartDateAndseatNumbers.isEmpty()) {
+						if (register.getNoOfSeatstoBook() == register.getPassengers().size()) {
+							Random rnd = new Random();
+							int number = rnd.nextInt(999999);
+							String pnr = String.format("%06d", number);
+							register.setPnr(pnr);
+							register.setSeatNumbers(seatNumbers);
+							seats.setFlightNumber(flightNumber);
+							seats.setPnr(pnr);
+							seats.setStartDate(findByFlightNumber.getStartDate());
+							seats.setEmail(register.getEmailId());
+							seats.setSeatNumbers(seatNumbers);
+							Boolean roundTripStatus = register.getRoundTripStatus();
+							if (Boolean.TRUE.equals(roundTripStatus)) {
+								register.setTotalBasePrice(findById.get().getRoundTripCost()
+										* seatNumbers.replaceAll("\\D+", "").length());
 							} else {
-								return BookingUtility.prepareBadRequest("No of seats is equal to list of passengers");
+								register.setTotalBasePrice(
+										findById.get().getTicketCost() * seatNumbers.replaceAll("\\D+", "").length());
 							}
+							selectedSeatsRepo.save(seats);
+							bookRegisterRepo.save(register);
+							return new ResponseEntity<>(" PNR " + register.getPnr(), HttpStatus.OK);
 
 						} else {
-							return BookingUtility.prepareBadRequest(seatNumbers + " Already Booked");
+							return BookingUtility.prepareBadRequest("No of seats is equal to list of passengers");
 						}
 
 					} else {
-						return BookingUtility.prepareBadRequest(
-								register.getEmailId() + " Do you don't have an Account .???   ...please register");
+						return BookingUtility.prepareBadRequest(seatNumbers + " Already Booked");
 					}
 
 				} else {
-					return BookingUtility.prepareBadRequest("Meal type should be veg/non-veg/non");
+					return BookingUtility.prepareBadRequest(
+							register.getEmailId() + " Do you don't have an Account .???   ...please register");
 				}
-			} else {
-				return BookingUtility.prepareBadRequest("Selected Flight is not active");
 
+			} else {
+				return BookingUtility.prepareBadRequest("Meal type should be veg/non-veg/non");
 			}
 		} else {
-			return BookingUtility
-					.prepareBadRequest("Flight number is Not found... , Please enter correct details .. !!");
-		}
+			return BookingUtility.prepareBadRequest("Selected Flight is not active");
 
+		}
 	}
 
 	@Override

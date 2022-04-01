@@ -33,10 +33,6 @@ public class BookingUtility {
 		if (bookingRegister.getRoundTripStatus() == null) {
 			error.add("Round trip status");
 		}
-		if (bookingRegister.getMealType() == null) {
-			error.add("meal type");
-		}
-
 
 		return error;
 

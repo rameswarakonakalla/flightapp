@@ -39,8 +39,6 @@ public class BookingRegister {
 	
 	private Boolean roundTripStatus;
 	
-	private String mealType;
-	
 	@ManyToOne
 	private Flightapp flightdetails;
 	
