@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.flightapp.exception.UserDefinedException;
 import com.flightapp.model.BookingRegister;
 import com.flightapp.model.Flightapp;
-import com.flightapp.model.Passenger;
 import com.flightapp.model.SelectedSeats;
 import com.flightapp.model.UserData;
 import com.flightapp.repo.BookingRegisterRepo;

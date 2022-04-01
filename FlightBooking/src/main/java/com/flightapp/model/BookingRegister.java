@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
@@ -26,16 +25,9 @@ public class BookingRegister {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id ;
 	
-	
-//	private String name; 
-	
 	private String emailId;
 	
 	private Integer noOfSeatstoBook;
-	
-//	private String gender;
-	
-//	private Integer age;
 	
 	private String pnr;
 	

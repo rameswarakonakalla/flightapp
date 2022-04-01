@@ -1,9 +1,7 @@
 package com.flightapp.serviceimpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -15,14 +13,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.flightapp.exception.UserExistsException;
 import com.flightapp.model.AdminLoginDetails;
-import com.flightapp.model.ResponseMessage;
 import com.flightapp.model.UserData;
 import com.flightapp.repository.AdminRepo;
-import com.flightapp.repository.UserRepository;
 import com.flightapp.seviceimpl.AdminServiceImpl;
 import com.flightapp.seviceimpl.CustomerDetailsService;
 import com.flightapp.seviceimpl.JwtUtil;
