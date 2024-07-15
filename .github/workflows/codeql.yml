@@ -20,7 +20,7 @@ on:
 jobs:
   run_scan:
     name: 'SAST Scan'
-    uses: rameswarakonakalla/flightapp/.github/workflows/codeQL.yml@main
+    uses: rameswarakonakalla/flightapp/.github/workflows/codeqL.yml@main
     with:
       languages: "['java']"
       jdk-version: '11'
